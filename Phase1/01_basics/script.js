@@ -108,11 +108,11 @@ greeter();
 
  // 3. Arrow Functions
 
- SayHello();
+//  SayHello();
 
- const SayHello = () => {
-   console.log("I am arrow");
- }
+//  const SayHello = () => {
+//    console.log("I am arrow");
+//  }
 
  // Throws same error as the function expression due to the same TDZ reason.
 
@@ -129,5 +129,75 @@ greeter();
 // in the call stack :- Each function gets added to the stack when called
 // Once a function finishes, it is removed from the stack
 // The main program resumes after the function is done
+// JS always runs the function on top of the stack first!
 
-//  JS always runs the function on top of the stack first!
+// Closures allow a function to remember variables even after it has finished executing. (IMP)
+
+// example code to understand closures :- 
+
+function createCounter() {
+  let count = 0;  // Stored in memory (locker)
+
+  return function() {   // Function (key) that can access count
+    count++;
+    console.log(count);
+  };
+}
+
+const counter = createCounter();  // Creates a new counter
+counter();  // 1
+counter();  // 2
+counter();  // 3
+counter();
+
+// closure yaani function apne execution ke baad bhi variable ki value ko retain kare, ki last value kya thi
+
+// what will happen without closure ?
+
+function createCounter1() {
+  let count = 0; // New `count` is created every time
+  
+  function increment() {
+    count++;
+    console.log(count);
+  }
+
+  increment();
+}
+
+createCounter1(); // 1
+createCounter1(); // 1
+createCounter1(); // 1
+
+// HOW TO WRITE OR IDENTIFY A CLOSURE FUNCTION 
+
+// A closure is just a function that remembers variables from its outer scope even after the outer function has finished executing.
+
+
+function outerFunction() {
+  let secret = "I am a closure";  // ✅ A variable inside the outer function
+
+  return function innerFunction() {
+    console.log(secret); // ✅ Inner function remembers `secret`
+  };
+}
+
+const closureFunc = outerFunction(); // `outerFunction()` runs and returns `innerFunction`
+closureFunc(); // Prints: I am a closure
+
+function CountKeeper(){
+  let CountVal = 0;
+
+  return function CountAccesser(){
+    CountVal++;
+    console.log(CountVal)
+  }
+
+}
+
+const CounterFunc = CountKeeper();
+
+CounterFunc();
+CounterFunc();
+CounterFunc();
+CounterFunc();
