@@ -201,3 +201,16 @@ CounterFunc();
 CounterFunc();
 CounterFunc();
 CounterFunc();
+
+const store=(function CountKeeper1(){
+  let countval1 = 0;
+  return function countaccesser1(){
+    countval1++;
+    console.log(countval1)
+  }
+})();
+
+store();
+store();
+store();
+store();
