@@ -280,3 +280,32 @@ ObjCar3.Horn();
 
 // Looking at the above example it becomes pretty clear that arrow function takes this from its surrounding scope, here it is regular function Horn.
 
+// Now instead of this arrow function if you use a regular function inside another regular function. The following will happen:-
+
+const ObjCar4 = {
+  model:"Sonet",
+  brand:"kia",
+  Horn:function(){
+    function innerfunc(){
+      console.log(`hello i am ${this.model} of brand ${this.brand}`)
+    }
+   innerfunc();
+  }
+}
+
+ObjCar4.Horn();
+
+// Output :- hello i am undefined of brand undefined
+
+// why does this happen ?
+
+// innerFunction() is also a regular function, but regular functions create their own this.
+// Since innerFunction() is not called on person, it defaults to the global scope (window in browsers, undefined in strict mode).
+
+/*
+Regular function inside object	                    this refers to the object ✅
+Arrow function inside object	                      this refers to global (window) ❌
+Regular function inside a regular function	        this refers to global (window) ❌
+Arrow function inside a regular function	          this inherits this from the regular function ✅
+*/
+
