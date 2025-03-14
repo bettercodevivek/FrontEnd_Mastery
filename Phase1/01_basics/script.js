@@ -214,3 +214,69 @@ store();
 store();
 store();
 store();
+
+
+// THIS KEYWORD IN DIFFERENT CONTEXTS
+
+let name_my = "vivek"
+
+console.log(this.name_my)
+
+// Above code returns undefined, because we are running code in node js, in node the default global object is not window.
+// whereas in browsers, the default global object is window, but this.name will return the value in browser console only and only if
+// var is used to declare the name, because var attaches itself to window object whereas let and const doesnt do that.
+
+function ShowThis(){
+  let val = 1000;
+  console.log(this.val)
+}
+
+ShowThis()
+
+const ObjCar = {
+  model:"Fronx",
+  brand:"maruti",
+  Year:2024,
+  Horn:function(){
+    console.log(`Hello I am ${this.model} from ${this.brand} of year ${this.Year}`);
+  }
+}
+
+ObjCar.Horn();
+
+// When a function is created as a object method then the this keyword refers to the properties of the object itself.
+
+const ObjCar2 = {
+  model:"Fortuner",
+  brand:"Toyota",
+  Horn: ()=>{
+    console.log(`hello I am ${this.model}`)
+  }
+};
+
+ObjCar2.Horn()
+
+// Gives undefined, because arrow function doesnt bind this.
+
+// So, basically kya ho raha hai, ek object mein  jab regular function use karke object method banate hai then, this of that regular function
+// refers to that object only, uski binding uss object se hi hojati hai by default, but that doesnt hold true for arrow functions.
+// yaani agar ek arrow function object mein, regular ki jagah use kara jaaye, toh this bind nhi hoga object se by default, rather woh apne surrounding scope ka this
+// inherit karte, jo iss case mein global scope hojata hai. 
+
+// But agar yahi hum nesting karde, toh pata chal jayega upar kya kehne ki try kar rahe hai. lets see with an example:-
+
+const ObjCar3 = {
+  model:"Sonet",
+  brand:"kia",
+  Horn:function(){
+    const innerfunc=()=>{
+      console.log(`hello i am ${this.model} of brand ${this.brand}`)
+    }
+   innerfunc();
+  }
+}
+
+ObjCar3.Horn();
+
+// Looking at the above example it becomes pretty clear that arrow function takes this from its surrounding scope, here it is regular function Horn.
+
