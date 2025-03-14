@@ -309,3 +309,10 @@ Regular function inside a regular function	        this refers to global (window
 Arrow function inside a regular function	          this inherits this from the regular function ✅
 */
 
+ // Lets learn about call,bind and apply now.
+
+ // These three methods allow us to manually set this inside a function.
+//  They are useful when this isn’t behaving the way we want.
+
+
+
