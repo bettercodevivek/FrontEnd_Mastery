@@ -314,5 +314,20 @@ Arrow function inside a regular function	          this inherits this from the r
  // These three methods allow us to manually set this inside a function.
 //  They are useful when this isn’t behaving the way we want.
 
+const CarObj = {
+  model:"nexon",
+  brand:"tata",
+  horn:function(){
+    function SayHello(){
+    console.log(`hello i am ${this.model}`)
+    }
+    SayHello();
+  }
+}
 
+CarObj.horn()
+
+// call,apply and bind all three are used for the same purpose but have certain difference between them.
+
+// for example:- bind is used to permanently bind this to a particular scope whereas call and apply are temporary
 
