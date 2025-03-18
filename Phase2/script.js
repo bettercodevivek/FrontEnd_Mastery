@@ -120,3 +120,29 @@ avenger.fly()
 //  Prototypes allow inheritance in JavaScript
 
 
+const obj1 = {
+    prop1:function(){
+        console.log("I am prop 1")
+    }
+}
+
+const obj2 = {
+    prop2:function(){
+        console.log("I am prop 2")
+    }
+}
+
+const obj3 = {
+    myname:function(){
+        console.log(" hello i am object 3")
+    }
+}
+
+Object.setPrototypeOf(obj2,obj1)
+
+Object.setPrototypeOf(obj3,obj2)
+
+obj3.myname()
+
+obj3.prop2()
+
