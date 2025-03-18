@@ -31,10 +31,45 @@ console.log(IronMan.name);
 console.log(IronMan.power);
 
 
-function Hero(){
-    this.name = "Thor";
-}
+// function Hero(){
+//     this.name = "Thor";
+// }
 
-Hero.prototype.weapon = "mjolnir";
+// Hero.prototype.weapon = "mjolnir";
 
-const thor = new Hero();
+// const thor = new Hero();
+
+// Project to revise concepts till now:-  MINI AUTH SYSTEM
+
+function AuthSystem(Username,Password){
+    let Storedname=Username;
+    let Storedpass=Password;
+    let isLoggedIn=false;
+
+    this.login=function(name,pass){
+        if(name===Storedname && pass===Storedpass){
+            isLoggedIn=true;
+            console.log(`welcome sir, you have logged in as ${Storedname}`)
+        }
+        else{
+            console.log(`Invalid Credentials Mr.${Storedname}`)
+        }
+    }
+
+    this.logout=function(){
+        if(isLoggedIn){
+            console.log(`user logged in as ${Storedname}`)
+            isLoggedIn=false
+        }
+        else{
+            console.log("No user logged in boss !")
+        }
+    }
+};
+
+const user1 = new AuthSystem("Ironman","jarvis123")
+const userFunc = user1.login
+userFunc("Ironman","jarvis123")
+
+
+
