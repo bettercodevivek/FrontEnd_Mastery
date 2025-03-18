@@ -147,28 +147,54 @@ obj3.myname()
 obj3.prop2()
 
 function Villain(name,evilPlan){
-    name="dynamo";
-    evilPlan="end World";
-    console.log(name,evilPlan)
+    this.name=name;
+    this.evilPlan=evilPlan;
 }
 
 Villain.prototype.laugh=function(){
     console.log("eery laugher of villain")
-}
+};
 
 function SuperVillain(name,evilPlan,powerLevel){
-    powerLevel="infinity";
-    console.log(name,evilPlan,powerLevel)
+    Villain.call(this,name,evilPlan);
+    this.powerLevel=powerLevel;
 }
 
-Object.setPrototypeOf(SuperVillain,Villain)
+// Set up prototype inheritance
+SuperVillain.prototype = Object.create(Villain.prototype);
+SuperVillain.prototype.constructor = SuperVillain; // this lines resets the constructor back to supervillain because when Object.create()
+// is used, it sets the constructor for supervillain to villain, which is wrong.
+
 
 SuperVillain.prototype.destroyWorld=function(){
     console.log(" i will destroy the wrold")
-}
+};
+
+const thanos = new SuperVillain("Thanos","Destroy world","infinity")
+
+console.log(thanos.name);  // ✅ "Thanos"
+console.log(thanos.evilPlan);  // ✅ "Erase half the universe"
+console.log(thanos.powerLevel);  // ✅ "Infinity"
+
+thanos.laugh();
+thanos.destroyWorld();
 
 
 // Prototyping ka matlab hi yeh hai ki aapne 2 objects ke beech inheritance ka ek relationship create kardiya hai,
 
 // protoype kuch nahi khd ek object hai, agar aapke paas 2 objects hai obj1 and obj2 and obj1 ka prototype hum obj1 set karde
 // toh, obj1, obj2 ki props inherit karlega. simple as that !!!!
+
+/* 
+These lines set up inheritance so SuperVillain can use methods from Villain.
+🔹 First Line: SuperVillain.prototype = Object.create(Villain.prototype);
+
+✔️ Object.create(Villain.prototype) creates a new empty object that inherits from Villain.prototype.
+✔️ We assign this new object to SuperVillain.prototype, so now SuperVillain inherits all methods from Villain.
+
+👉 Without this line, SuperVillain would not inherit anything from Villain.
+🔹 Second Line: SuperVillain.prototype.constructor = SuperVillain;
+
+✔️ After setting up inheritance, SuperVillain.prototype.constructor gets overwritten (it now points to Villain because of Object.create()).
+✔️ This line restores the correct constructor reference.
+ */
