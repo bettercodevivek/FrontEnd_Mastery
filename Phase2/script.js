@@ -71,5 +71,52 @@ const user1 = new AuthSystem("Ironman","jarvis123")
 const userFunc = user1.login
 userFunc("Ironman","jarvis123")
 
+// Every JavaScript object has a hidden property called [[Prototype]], which is a reference to another object.
+
+// 💡 Think of a prototype as a "backup storage" for an object. If an object doesn’t have a property or method, it looks into its prototype to find it.
+
+const hero1={
+    model:"ironman"
+};
+
+console.log(hero1.model);
+
+console.log(hero1.toString())
+
+// to get prototype of an object we can either use:-
+  
+console.log(hero1.__proto__)
+
+// or we can use:-
+
+console.log(Object.getPrototypeOf(hero1))
+
+// Let us see an example to understand how prototypes work
+
+const avenger = {
+    name:"captain america"
+};
+
+const superhero = {
+    fly:function(){
+        console.log("i can fly")
+    }
+}
+
+Object.setPrototypeOf(avenger,superhero)
+
+avenger.fly()
+
+// Setting the prototype of `avenger` to `superHero`
+
+// Every object in JavaScript has a prototype (except Object.create(null)).
+
+// If a property/method isn’t found in the object, JavaScript looks up the prototype chain.
+
+// Prototypes are how inheritance works in JS (before ES6 classes).
+
+// __proto__ is used to check the prototype of an object (but prefer Object.getPrototypeOf()).
+
+//  Prototypes allow inheritance in JavaScript
 
 
