@@ -146,3 +146,29 @@ obj3.myname()
 
 obj3.prop2()
 
+function Villain(name,evilPlan){
+    name="dynamo";
+    evilPlan="end World";
+    console.log(name,evilPlan)
+}
+
+Villain.prototype.laugh=function(){
+    console.log("eery laugher of villain")
+}
+
+function SuperVillain(name,evilPlan,powerLevel){
+    powerLevel="infinity";
+    console.log(name,evilPlan,powerLevel)
+}
+
+Object.setPrototypeOf(SuperVillain,Villain)
+
+SuperVillain.prototype.destroyWorld=function(){
+    console.log(" i will destroy the wrold")
+}
+
+
+// Prototyping ka matlab hi yeh hai ki aapne 2 objects ke beech inheritance ka ek relationship create kardiya hai,
+
+// protoype kuch nahi khd ek object hai, agar aapke paas 2 objects hai obj1 and obj2 and obj1 ka prototype hum obj1 set karde
+// toh, obj1, obj2 ki props inherit karlega. simple as that !!!!
