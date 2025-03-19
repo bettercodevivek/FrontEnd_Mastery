@@ -182,7 +182,7 @@ thanos.destroyWorld();
 
 // Prototyping ka matlab hi yeh hai ki aapne 2 objects ke beech inheritance ka ek relationship create kardiya hai,
 
-// protoype kuch nahi khd ek object hai, agar aapke paas 2 objects hai obj1 and obj2 and obj1 ka prototype hum obj1 set karde
+// protoype kuch nahi khd ek object hai, agar aapke paas 2 objects hai obj1 and obj2 and obj1 ka prototype hum obj2 set karde
 // toh, obj1, obj2 ki props inherit karlega. simple as that !!!!
 
 /* 
@@ -198,3 +198,74 @@ These lines set up inheritance so SuperVillain can use methods from Villain.
 ✔️ After setting up inheritance, SuperVillain.prototype.constructor gets overwritten (it now points to Villain because of Object.create()).
 ✔️ This line restores the correct constructor reference.
  */
+
+// Prototype Chain
+
+// Whenever you access a property/method on an object, JavaScript first looks in the object itself.
+
+// If it doesn’t find it, it goes up the prototype chain until:
+// ✅ It finds the property → Returns it
+// ❌ It reaches null → Returns undefined
+
+const GrandParent = {
+    LastName:"wayne",
+}
+
+const Parent = Object.create(GrandParent);
+
+Parent.FirstName = "Thomas";
+
+const Child = Object.create(Parent);
+
+Child.nickname = "Batkid";
+
+console.log(Child.nickname);
+
+console.log(Child.FirstName);
+
+console.log(Child.LastName);
+
+console.log(Child.age);
+
+// Toh isse simple words mein samjho, humne child object create kara from parent , basically making parent as its mentor(prototype) and we did the same for
+// parent with grandparent toh ho kya raha hai ki, Child ne parent ki saari properties inherit kari and parent ne grandparent ki, which means when we search for
+// a property in child object, JS will first look up in the obejct itself, then up in the prototype chain it will look in parent object, then further in grandparent
+// object and finally then in Object.prototype, but after this it becomes null.
+
+// child → parent → grandparent → Object.prototype → null
+
+// There are 2 ways to create prototype of an object, or should we say to set an object as prototype of another:-
+
+// 1. Object.create() method
+
+// This approach is used when you are creating a new object and want to set the prototype of that object during the creation itself.
+
+// Example code snippet :- 
+
+const MyObj1 = {
+    MyName1:"Josh M",
+};
+
+const MyObj2 = Object.create(MyObj1);
+MyObj2.MyName2 = "Dave S";
+
+console.log(MyObj2.__proto__ == MyObj1) // gives true
+
+// 2. Object.setPrototypeOf()
+
+const Myobj3 = {
+    Myname3 : "Walter W",
+};
+
+const Myobj4 = {
+    Myname4 : "Jesse P",
+};
+
+Object.setPrototypeOf(Myobj4,Myobj3);
+
+console.log(Myobj4.__proto__ == Myobj3) // gives true
+
+// When to use which one if they both do the same work:-
+
+// Both do the same thing, but Object.create(obj1) is recommended because: ✔️ It directly sets the prototype at object creation (more efficient).
+// ✔️ Object.setPrototypeOf(obj2, obj1) is slower because it changes the prototype after the object is created, which JavaScript engines don’t optimize well.
