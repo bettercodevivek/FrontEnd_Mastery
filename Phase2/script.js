@@ -269,3 +269,70 @@ console.log(Myobj4.__proto__ == Myobj3) // gives true
 
 // Both do the same thing, but Object.create(obj1) is recommended because: ✔️ It directly sets the prototype at object creation (more efficient).
 // ✔️ Object.setPrototypeOf(obj2, obj1) is slower because it changes the prototype after the object is created, which JavaScript engines don’t optimize well.
+
+// ULTIMATE PROTOTYPE CHALLENGE
+
+// Create a Multi-Level Prototype Chain for a Gaming Character System
+
+// 1. Create a BaseCharacter constructor function with:
+//     name, level properties
+//     attack() method that logs "🗡️ <name> attacks at level <level>!" 
+
+function BaseChar(name,level){
+    this.name=name;
+    this.level=level;
+}
+
+BaseChar.prototype.attack = function(){
+    console.log(`${this.name} attacks at level ${this.level}`)
+}
+
+
+// 2️. Create a Warrior constructor that inherits from BaseCharacter and adds:
+//     weapon property
+//     battleCry() method that logs "⚔️ <name>: For glory!"
+
+function warrior(name,level,weapon){
+    this.weapon=weapon;
+    BaseChar.call(this,name,level);
+}
+
+
+warrior.prototype=Object.create(BaseChar.prototype);
+
+warrior.prototype.constructor=warrior;
+
+warrior.prototype.battleCry=function(){
+    console.log(`${this.name}: For glory!`)
+}
+
+
+
+// 3. Create a Mage constructor that inherits from BaseCharacter and adds:
+//     spell property
+//     castSpell() method that logs "✨ <name> casts <spell>!"
+
+function Mage(name,level,spell){
+    this.spell = spell;
+    BaseChar.call(this,name,level);
+}
+
+
+Mage.prototype=Object.create(BaseChar.prototype);
+
+Mage.prototype.constructor=Mage;
+
+Mage.prototype.castSpell=function(){
+    console.log(`${this.name} casts ${this.spell}`)
+}
+
+const warrior1 = new warrior("Thor", 10, "Mjolnir");
+warrior1.attack();      // 🗡️ Thor attacks at level 10!
+warrior1.battleCry();   // ⚔️ Thor: For glory!
+console.log(warrior1.weapon);  // Mjolnir
+
+const mage1 = new Mage("Doctor Strange", 15, "Time Manipulation");
+mage1.attack();        // 🗡️ Doctor Strange attacks at level 15!
+mage1.castSpell();     // ✨ Doctor Strange casts Time Manipulation!
+console.log(mage1.spell);  // Time Manipulation
+
