@@ -1,0 +1,1 @@
+// In this Phase we will learn about Arrays and Strings
