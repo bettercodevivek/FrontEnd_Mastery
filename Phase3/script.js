@@ -66,3 +66,81 @@ const names = ["Harvey","Mike","Donna","Louis"];
 const UpperCaseNames = names.map(name=>name.toUpperCase());
 
 console.log(UpperCaseNames);
+
+// 4. map() on objects
+
+// if we have an array of users and we want only their names.
+
+ const users = [
+    {name:"John",age:35},
+    {name:"john2",age:40},
+    {name:"john3",age:45},
+ ]
+
+ const UserNames = users.map(user=>user.name);
+
+ console.log(UserNames)
+
+//  const UpdatedVals = numbers.map((value,index)=>{
+//     console.log(`original:${value},doubled:${value*2},index:${index}`)
+//  })
+
+//  console.log(UpdatedVals)
+
+// The above code is wrong, as values are not being returned as object and secondly, no return value gives an undefined array in output
+
+const UpdatedVals=numbers.map((value,index)=>{
+  return {
+    original:value,
+    doubled:value*2,
+    index:index,
+  }
+});
+
+console.log(UpdatedVals);
+
+// Challenge
+
+// Convert the array of words into an array of objects where each object contains:
+
+// word: the original word
+// length: the length of the word
+// indexPosition: the index
+
+const words = ["hello", "world", "javascript", "rocks"];
+
+const WordsConverted = words.map((word,index)=>{
+    return{
+        word:word,
+        length:word.length,
+        indexPosition:index,
+    }
+})
+
+console.log(WordsConverted)
+
+
+const UpdatedVals2 = numbers2.map((number,index)=>{
+    return{
+        original:number,
+        squared:number**2,
+        cube:number**3,
+        indexPosition:index,
+    }
+})
+
+console.log(UpdatedVals2)
+
+const people = ["Tony Stark", "Steve Rogers", "Bruce Wayne", "Clark Kent"];
+
+const peopleUpdated = people.map((people,index)=>{
+    const name= people.split(" ");
+    return{
+        fullname:people,
+        firstname:name[0],
+        lastname:name[1],
+        length:people.length,
+    }
+})
+
+console.log(peopleUpdated)
