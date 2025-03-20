@@ -336,3 +336,163 @@ mage1.attack();        // 🗡️ Doctor Strange attacks at level 15!
 mage1.castSpell();     // ✨ Doctor Strange casts Time Manipulation!
 console.log(mage1.spell);  // Time Manipulation
 
+
+// lets learn about ES6 inheritance and classes.
+
+// But what is actually ES6 ?
+
+// so, ES6 is the biggest updated version of javascript that came in 2015, and as its ECMAScript  version 6, its called ES6.
+
+// Inheritance means one class can take properties and methods from another class.
+
+// 1. CREATING A BASE CLASS 
+
+class BaseCharacter {
+    constructor(name,level){
+       this.name=name;
+       this.level=level;
+    }
+
+    attack(){
+        console.log(`${this.name} attacks at level => ${this.level} !`)
+    }
+}
+
+const hero = new BaseCharacter("thor",10);
+hero.attack();
+
+
+class Warrior extends BaseCharacter {
+    constructor(name,level,weapon){
+         super(name,level);
+         this.weapon=weapon;
+    }
+    battleCry(){
+        console.log(`${this.name}: For Gloryyyyy!!!`)
+    }
+}
+
+const warrior01 = new Warrior("cap",20,"Shield");
+
+warrior01.battleCry();
+warrior01.attack();
+
+class mage extends BaseCharacter{
+    constructor(name,level,spell){
+         super(name,level);
+         this.spell=spell;
+    }
+    CastSpell(){
+        console.log(`${this.name} casts ${this.spell}!`)
+    }
+}
+
+const Mage01 = new mage("strange",100,"magic");
+
+Mage01.attack();
+
+
+// function Vehicle(type,speed){
+//     this.speed=speed;
+//     this.type=type;
+// }
+
+// Vehicle.prototype.drive=function(){
+//     console.log(`The ${this.type} is driving at speed  ${this.speed} km/h`)
+// }
+
+// Challenge = Now extend Superhero to create a Mutant superhero with an extra mutation property!
+
+function Superhero(name,power){
+   this.name=name;
+   this.power=power;
+}
+
+Superhero.prototype.fight=function(){
+    console.log(`${this.name} fights with power level ${this.power}!`)
+}
+
+function Wolverine(name,power,mutation){
+    Superhero.call(this,name,power);
+    this.mutation=mutation;
+}
+
+Wolverine.prototype=Object.create(Superhero.prototype);
+
+Wolverine.prototype.constructor=Wolverine;
+
+const Wolv1 = new Wolverine("xmen",200,"regenration");
+
+console.log(Wolv1.name,Wolv1.power,Wolv1.mutation);
+
+Wolv1.fight();
+
+
+// CHALLENGE 1 TO MASTER ES6 CLASSES
+
+// Objective:
+
+//     Create a Superhero class with name, power, and an attack() method.
+//     Create a Mutant class that inherits from Superhero and adds mutation.
+//     Add a mutate() method to Mutant.
+
+class Superhero1{
+    constructor(name,power){
+        this.name=name;
+        this.power=power;
+    }
+    attack(){
+        console.log(`${this.name} attacks with power => ${this.power}`)
+    }
+    describe(){
+        console.log(` ${this.name} is a superhero with ${this.power} power!`);
+    }
+}
+
+class Mutant extends Superhero1{
+    constructor(name,power,mutation){
+        super(name,power);
+        this.mutation=mutation;
+    }
+    mutate(){
+        console.log(`${this.name} can mutate into ${this.mutation}`)
+    }
+}
+
+const Mutant1 = new Mutant("Ninja",100,"Regeneration");
+Mutant1.describe();
+Mutant1.attack();
+Mutant1.mutate();
+
+// CHALLENGE 2
+
+// Objective:
+
+//     Create a Vehicle class with type, speed, and a drive() method.
+//     Create a ElectricVehicle class that inherits from Vehicle and adds batteryLife.
+//     Add a chargeBattery() method to ElectricVehicle.
+
+
+class Vehicle1{
+    constructor(type,speed){
+        this.type=type;
+        this.speed=speed;
+    }
+    drive(){
+        console.log(`${this.type} drives at this speed => ${this.speed}`)
+    }
+}
+
+class ElectricVehicle extends Vehicle1{
+    constructor(type,speed,batterylife){
+        super(type,speed);
+        this.batterylife=batterylife;
+    }
+    chargeBattery(){
+        console.log(`${this.type} has a battery life of => ${this.batterylife}`)
+    }
+}
+
+const EV1 = new ElectricVehicle("Windsor",100,500);
+EV1.drive();
+EV1.chargeBattery();
