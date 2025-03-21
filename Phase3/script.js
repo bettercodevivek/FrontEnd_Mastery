@@ -144,3 +144,54 @@ const peopleUpdated = people.map((people,index)=>{
 })
 
 console.log(peopleUpdated)
+
+// FINAL CHALLENGE FOR MAP()
+
+const movies = [
+    { title: "Inception", rating: 8.8, year: 2010 },
+    { title: "The Room", rating: 3.7, year: 2003 },
+    { title: "Interstellar", rating: 8.6, year: 2014 },
+    { title: "Twilight", rating: 5.2, year: 2008 },
+    { title: "The Dark Knight", rating: 9.0, year: 2008 }
+  ];
+  
+const UpdatedMovies = movies.map((value)=>{
+    let status;
+    if(value.rating >= 8){
+        status=`🔥 Must Watch!`;
+    }
+    else if(value.rating > 5 && value.rating <= 7){
+        status=`👍 Good Movie`;
+    }
+    else{
+        status=`👎 Skip it`;
+    }
+    return{
+        displayTitle:`🎬 ${value.title} (${value.year})`,
+        status,
+    }
+});
+
+console.log(UpdatedMovies)
+
+// 2. filer()
+
+// filter() is like the bouncer at the club—it only lets in the elements that pass a specific condition and kicks out the rest! 
+
+// Basic Syntax
+
+// const newArray = originalArray.filter((item) => {
+//     return condition; // Only items that return true will stay
+// });
+
+// Examples:-
+
+const Numbers_num = [2,4,5,7,8,10];
+
+const FilteredNums = Numbers_num.filter((num)=>num % 2 == 0);
+
+console.log(FilteredNums)
+
+// In the above example, we use filter to store only those numbers, which are even.
+
+
