@@ -194,4 +194,79 @@ console.log(FilteredNums)
 
 // In the above example, we use filter to store only those numbers, which are even.
 
+const SuperHeroes = [
+    {name:"Hulk",Power:98},
+    {name:"Thor",Power:92},
+    {name:"Spidey",Power:85},
+    {name:"Cap",Power:99},
+    {name:"Nat",Power:80},
+];
 
+const StrongestHeroes = SuperHeroes.filter((value)=>value.Power>80);
+
+console.log(StrongestHeroes)
+
+const candidates = [
+    { name: "John Wick", age: 40, experience: 10, clearance: "Top Secret" },
+    { name: "Ethan Hunt", age: 38, experience: 15, clearance: "Top Secret" },
+    { name: "Lara Croft", age: 30, experience: 7, clearance: "Confidential" },
+    { name: "James Bond", age: 45, experience: 20, clearance: "Top Secret" },
+    { name: "Jason Bourne", age: 35, experience: 8, clearance: "Classified" },
+    { name: "Natasha Romanoff", age: 32, experience: 12, clearance: "Top Secret" },
+    { name: "Kevin McCallister", age: 12, experience: 0, clearance: "None" }
+];
+
+
+const topAgents = candidates.filter((value)=> value.age >= 25 && value.experience >=5 && value.clearance=="Top Secret").map(
+    (value)=>({
+        
+            name:value.name,
+            experience:value.experience,
+    }
+)).sort((a,b)=>b.experience-a.experience)
+
+console.log(topAgents)
+
+// using filter for nested-data
+
+const students = [
+    { name: "Aiden", scores: { math: 85, science: 92 } },
+    { name: "Bella", scores: { math: 72, science: 89 } },
+    { name: "Chris", scores: { math: 50, science: 75 } },
+    { name: "Diana", scores: { math: 95, science: 90 } }
+  ];
+
+const PassedMaths = students.filter((student)=> student.scores.math >= 70)
+
+console.log(PassedMaths)
+
+// using filter for array inside objects
+
+const books = [
+    { title: "Learn Python", topics: ["Programming", "Python"] },
+    { title: "JavaScript Mastery", topics: ["Programming", "JavaScript"] },
+    { title: "Web Development", topics: ["HTML", "CSS", "JavaScript"] },
+  ];
+
+const JSBooks = books.filter((book)=>book.topics.includes("JavaScript"));
+
+console.log(JSBooks)
+
+// use includes() when filtering based on array elements inside object
+
+const employees = [
+    { name: "Alice", skills: ["JavaScript", "React", "Node.js"] },
+    { name: "Bob", skills: ["Python", "Django"] },
+    { name: "Charlie", skills: ["HTML", "CSS", "React"] },
+    { name: "David", skills: ["Java", "Spring Boot"] }
+  ];
+
+  
+  const ReactEmp = employees.filter((employee)=>employee.skills.length>=3).map((employee)=>{
+    return{
+        name:employee.name,
+        TotalSkills:employee.skills.join(","),
+    }
+  });
+
+  console.log(ReactEmp);
