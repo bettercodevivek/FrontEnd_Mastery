@@ -270,3 +270,53 @@ const employees = [
   });
 
   console.log(ReactEmp);
+
+
+  // 3. reduce()
+
+  // reduce() is a powerful array method that reduces an array into a single value (like a sum, product, object, or even another array).
+
+  // syntax :- 
+
+//   array.reduce((accumulator, currentValue, index, array) => {
+//     return updatedAccumulator;
+// }, initialValue);
+
+// accumulator → Stores the result as the function runs.
+
+// currentValue → The current item in the array.
+
+// index (optional) → The index of the current item.
+
+// array (optional) → The original array.
+
+// initialValue (optional) → The starting value of the accumulator. If omitted, the first array element is used.
+
+
+const numbersnew = [1, 2, 3, 4, 5];
+
+const sum = numbersnew.reduce((acc, num) => {return acc + num}, 0);
+
+console.log(sum); // Output: 15
+
+const numbersnew1 = [2,4,6,8,10]
+
+const sum1 = numbersnew1.reduce((acc,number,index)=>{
+    if(index % 2 == 0){
+        acc=acc+number
+    }
+    return acc;
+},0)
+
+console.log(sum1);
+
+const max = numbersnew1.reduce((max,score)=>(score > max ? score : max),0)
+
+console.log(max)
+
+// There are 2 more applications of reduce():-
+
+// 1. Conversion of array into object (Counting Occurences of array elements)
+
+// 2. Flattening of array 
+
