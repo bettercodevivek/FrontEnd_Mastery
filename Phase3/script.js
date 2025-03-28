@@ -319,4 +319,30 @@ console.log(max)
 // 1. Conversion of array into object (Counting Occurences of array elements)
 
 // 2. Flattening of array 
+ 
 
+// Counting Occurences of array elements
+
+const fruits1 = ["apple","orange","apple","orange","lemon","lemon","lemon"]
+
+const CountFruits = fruits1.reduce((acc,fruit)=>{
+    acc[fruit]=(acc[fruit] || 0)+1;
+    return acc;
+},{})
+
+console.log(CountFruits)
+
+// What does (acc[fruit] || 0) + 1 do?
+
+//  If acc[fruit] exists, it adds 1.
+//  If acc[fruit] does not exist, it starts at 0, then adds 1.
+
+
+const names1 = ["john","mike","harvey","john","john","harvey"]
+
+const namesCount = names1.reduce((acc,name)=>{
+    acc[name]=(acc[name] || 0) + 1;
+    return acc;
+},{});
+
+console.log(namesCount)
