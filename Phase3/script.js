@@ -346,3 +346,76 @@ const namesCount = names1.reduce((acc,name)=>{
 },{});
 
 console.log(namesCount)
+
+// Flattening an array using reduce
+
+const nestedArr = [[1, 2], [3, 4], [5, 6]];
+
+const flatArr = nestedArr.reduce((acc,curr)=>acc.concat(curr),[]);
+
+console.log(flatArr)
+
+// simply using concat(), we can flatten an array in reduce()
+
+const threeDArray = [[[1, 2]], [[3, 4]], [[5, 6]]];
+
+const flatArray = threeDArray.reduce((acc,curr)=>acc.concat(...curr),[]);
+
+console.log(flatArray); 
+
+// let us see a few more array methods now :- 
+
+// 1.  find() → Returns the first element that matches the condition.
+// 2️. findIndex() → Returns the index of the first matching element, or -1 if not found.
+// 3️.  some() → Returns true if at least one element satisfies the condition.
+// 4️. every() → Returns true only if all elements meet the condition
+
+
+const candidates1 = [
+    { name: "Alice", age: 28, experience: 6, skills: ["JavaScript", "React", "Node.js"] },
+    { name: "Bob", age: 22, experience: 2, skills: ["HTML", "CSS", "JavaScript"] },
+    { name: "Charlie", age: 35, experience: 10, skills: ["Python", "Django", "Machine Learning"] },
+    { name: "David", age: 30, experience: 7, skills: ["JavaScript", "React", "TypeScript"] },
+    { name: "Eve", age: 25, experience: 5, skills: ["JavaScript", "Vue", "Node.js"] }
+  ];
+
+  
+//   Your Tasks:
+
+//  find() → Find the first candidate with React in their skills.
+//  findIndex() → Find the index of the first candidate with less than 3 years of experience.
+//  some() → Check if at least one candidate is skilled in Machine Learning.
+//  every() → Verify if all candidates have at least 2 skills.
+
+const reactDev = candidates1.find(candidate1=>candidate1.skills.find(skill=>skill==="React"));
+
+const juniorDevIndex = candidates1.findIndex(candidate1=>candidate1.experience < 3);
+
+const hasMLExpert = candidates1.some(candidate1=>candidate1.skills.find(skill=>skill==="Machine Learning"))
+
+const allHaveSkills =candidates1.every(candidate1=>candidate1.skills.length > 2)
+
+
+// Your implementation is solid and works as expected. Just a tiny optimization suggestion:
+
+// Instead of using .find(skill => skill === "React"), you can directly use .includes("React") for better readability and efficiency.
+
+console.log(reactDev);
+console.log(juniorDevIndex);
+console.log(hasMLExpert);
+console.log(allHaveSkills);
+
+
+// Now, we will learn sorting in js in detail
+
+// JavaScript has a built-in sort() method for arrays.
+
+// By default, sort() converts elements to strings and then sorts them lexicographically (like dictionary order).
+
+const numbersarr1 = [3, 15, 1, 25, 8]
+
+console.log(numbersarr1.sort())
+
+// output is not desired because by default js converts elements into string when sort() is used.
+
+// and then after conversion to string, elements are compared lexographically, so numbers wont be compared numerically.
