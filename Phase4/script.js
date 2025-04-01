@@ -20,5 +20,38 @@ console.log("task2")
 console.log("task3")
 console.log("task4")
 
-// async code will include either of these :- setTimeout, setInterval, Promise, fetch, then
+// async code will include either of these :- setTimeout, setInterval, Promise, fetch, then.
 
+// example of async code 
+
+console.log("task1");
+
+// setTimeout(function(){
+//     console.log("task2")
+// },4000);
+
+console.log("task3");
+
+// setInterval(function(){
+//     console.log("Testing.....")
+// },2000)
+
+// CALLBACKS
+
+// callbacks are functions passed as argument in another function
+
+// Callbacks are like "Call me back when it's done!" functions.
+
+function Hello(name,callback){
+    console.log(`hello! mr. ${name}`);
+    setTimeout(function(){
+        callback();
+    },2000)
+    
+}
+
+function Greet(){
+    console.log("I am good")
+}
+
+Hello("vivek",Greet)
