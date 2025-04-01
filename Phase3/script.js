@@ -412,10 +412,70 @@ console.log(allHaveSkills);
 
 // By default, sort() converts elements to strings and then sorts them lexicographically (like dictionary order).
 
-const numbersarr1 = [3, 15, 1, 25, 8]
+// Here are some key points:
 
-console.log(numbersarr1.sort())
+//     Sorts in-place: This means it modifies the original array.
 
-// output is not desired because by default js converts elements into string when sort() is used.
+//     Default sorting: By default, .sort() converts elements to strings and compares them lexicographically (i.e., alphabetically).
 
-// and then after conversion to string, elements are compared lexographically, so numbers wont be compared numerically.
+// 1. SORTING ARRAY OF NUMBERS
+
+// in ascending
+
+const nums1 = [10, 5, 100, 1];
+nums1.sort((a, b) => a - b); 
+console.log(nums1); 
+
+
+// so basically, compare function needs to be used to sort a numerical array , compare function is => (a,b)=>a-b or b-a , now
+// it is important to understand here, that what the compare function in doing in js under the hood.
+
+// So, js basically takes any 2 random elements in the array as a and b, they need not be adjacent and compares them based on given
+// condition whether a-b or b-a , and it does it till the whole array is sorted.
+
+// if a-b > 0, it means a comes after b.
+
+// if a-b < 0 , it means a comes before b;
+
+// Compare 10 and 5: a - b = 10 - 5 = 5 (positive, so 5 comes before 10).
+
+// Compare 10 and 100: a - b = 10 - 100 = -90 (negative, so 10 stays before 100).
+
+// Compare 100 and 1: a - b = 100 - 1 = 99 (positive, so 1 comes before 100).
+
+const nums2 = [24,12,54,67,11,15];
+
+nums2.sort((a,b)=>a-b)
+
+console.log(nums2)
+
+// 2. SORTING ARRAY OF OBJECTS
+
+// To sort arrays of objects, you’ll typically want to sort by a property. 
+// You can use a compare function to specify how you want to compare the objects.
+
+const peoples = [
+    {name:"john",age:25},
+    {name:"harvey",age:12},
+    {name:"mike",age:20}
+]
+
+peoples.sort((a,b)=>a.age-b.age)
+
+console.log(peoples)
+
+// here we are sorting people on the basis of their ages in ascending order, but if we just give sort() without any compare
+// function , it would by default sort them on basis of names (alphabetically).
+
+// challenge 1
+
+const srtbooks = [
+    { title: "Book A", year: 2020 },
+    { title: "Book B", year: 2015 },
+    { title: "Book C", year: 2018 }
+];
+
+
+srtbooks.sort((a,b)=>a.year-b.year)
+
+console.log(srtbooks)
