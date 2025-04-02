@@ -89,3 +89,51 @@ setTimeout(function(){
 //     If one task takes too long, everything else gets blocked! 
 
 //     But JS avoids blocking by using ASYNC operations (Web APIs, Event Loop, Callbacks, Promises, etc.) 
+
+// Yaani aise bhi samajh sakte ho that js single threaded yaani ek call stack mein saare tasks ek ek karke hote hai, isliye hi async code ki need hai
+// kyuki async code ki madad se we can ensure koi piece of code, baaki code ka execution block na kare.
+
+console.log("Task-1")
+console.log("Task-2")
+setTimeout(function(){
+    console.log("Task-3")
+},0)
+console.log("Task-4")
+
+// Uparwale example mein task1,task2,task4 are sync code toh woh direct main call stack mein jaate hai execute hone
+// toh pehle yeh saare execute honge fir jab stack empty hojayega, toh side stack mein dekha jayega koi async operation hai ya nahi
+// agar hai toh fir woh main stack mein daalke execute hojata hai, jaise in this case task4.
+
+// Now, callback humesha ek function hota hai, ek aisa function jo async code ke complete hone pe chalta hai.
+
+function delayedMessage(message,delay,callback){
+    setTimeout(function(){
+        console.log(message)
+        callback();
+    },delay)
+}
+
+function delayCallback(){
+    console.log("delayed message executed boss !")
+}
+
+delayedMessage("Hello My Name is Vivek Singh",2000,delayCallback)
+
+var answer = new Promise((res,rej)=>{
+    var n = Math.floor(Math.random())*100;
+    if(n<5){
+        return res();
+    }
+    else{
+        return rej();
+    }
+})
+
+answer.then(
+    function(){
+        console.log("number is lesser than 5")
+    }
+)
+.catch(function(){
+    console.log("number is greater than 5")
+})
