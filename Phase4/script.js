@@ -38,9 +38,9 @@ console.log("task3");
 
 // CALLBACKS
 
-setTimeout(function(){
-    console.log("I am an example of Callback function")
-},4000)
+// setTimeout(function(){
+//     console.log("I am an example of Callback function")
+// },4000)
 
 // Toh callback kya hota hai se zyda confuse na hoke simple rakhte hai :- upar setTimeout mein jo function as an argument pass
 // kara hai, wohi ek callback function hai.
@@ -106,34 +106,27 @@ console.log("Task-4")
 
 // Now, callback humesha ek function hota hai, ek aisa function jo async code ke complete hone pe chalta hai.
 
-function delayedMessage(message,delay,callback){
-    setTimeout(function(){
-        console.log(message)
-        callback();
-    },delay)
-}
+// Basically, aisa samjho ki hamara ek function hai jo koi data fetch karke laa rha hai, and we want ki jab woh data aajaye
+// uspe kch operation hoye, but as js is synchronous in nature, how would you ensure ki sirf tab hi operation hoye jab data aajaye
+// usse pehle execute hoke error na de, here is where you use callback.
 
-function delayCallback(){
-    console.log("delayed message executed boss !")
-}
+function downloadData(fileName, afterDownload) {
+    console.log("Downloading " + fileName + "...");
+    
+    setTimeout(function() {
+      let data = "This is the content of " + fileName;
+      afterDownload(data); // Pass data to the callback
+    }, 2000);
+  }
+  
+  function useTheData(myData) {
+    console.log("Now I can use the data: " + myData);
+  }
+  
+  downloadData("important_file.txt", useTheData);
 
-delayedMessage("Hello My Name is Vivek Singh",2000,delayCallback)
-
-var answer = new Promise((res,rej)=>{
-    var n = Math.floor(Math.random())*100;
-    if(n<5){
-        return res();
-    }
-    else{
-        return rej();
-    }
-})
-
-answer.then(
-    function(){
-        console.log("number is lesser than 5")
-    }
-)
-.catch(function(){
-    console.log("number is greater than 5")
-})
+  // Yaha agar upar hum useTheData ko as a callback na pass karke, normal ek sync code ki tarah likhdete, toh data aane se pehle hi execute hojata
+  // aur error dedeta. TOH AASAN SHABDO MEIN CALLBACK HUM APNE CODE KO ASYNC BANANE KE LIYE USE KARTE HAI, YAANI JAB AAP CHAHO
+  // KI MERA KOI PARTICULAR FUNCTION TAB EXECUTE HOYE JAB USSE KOI CUE MILE, LIKE KOI EVENT HOYE. ISLIYE CALLBACKS KA SABSE
+  // COMMON AND IMPORTANT REAL LIFE USE CASE HAI EVENT-LISTENERS, JO EK CALLBACK LETE HAI, WHICH MEANS, EVENT TRIGGER HOTE HI 
+  // CALLBACK EXECUTE HOJAYEGA.
