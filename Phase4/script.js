@@ -179,25 +179,81 @@ calculateDouble(10,callback);
 //   }
 // });
 
-// Toh basically, yeh callback hell se bachne ke liye, we can use promises in js.
+// DEKH CONFUSE MAT HO, SIMPLE SAMAJH => JAVASCRIPT BY DEFAULT SYNCHRONOUS HAI, AB USME ASYNC BANANE KE LIYE CALLBACK KA MAINLY
+// USE HOTA THA STARTING MEIN KI, THERE IS THIS PARTICULAR FUNCTION JO MAIN CHAHTA HU KI TAB EXECUTE HOYE JAB ISSE EK TRIGGER YA CUE MILE
+// TOH YAHA CALLBACK KAAM AATA HAI, AB HUA KYA KI, COMPLEX REQUIREMENTS MEIN CALLBACK KI NESTING HUI, WHICH LEAD TO SOMETHING CALLED
+// CALLBACK HELL. TOH USS SE BACHNE KE LIYE AAYA PROMISES KA CONCEPT IN JS.
 
-// A Promise is like an IOU (I Owe You) in JavaScript.
-// It's an object that represents a future value - something that doesn't exist yet but will (hopefully) exist later.
+// TOH YAANI PROMISES DOES WHAT CALLBACK DOES BUT IN A MORE EFFICIENT WAY.
 
-let p = new Promise((resolve,reject)=>{
-  let a = 3+2;
-  if(a===4){
-    return resolve();
-  }
-  else{
-    return reject();
-  }
+// AB PROMISE BASICALLY EXAMPLE SE SAMAJH:- 
+
+let chaiBanaPromise = new Promise((resolve, reject) => {
+  console.log("Gas on, paani garam ho raha hai...");
+
+  setTimeout(() => {
+      let gasAvailable = true; // Try false to test reject case
+
+      if (gasAvailable) {
+          resolve("Chai ready! ☕");
+      } else {
+          reject("Gas khatam ho gayi! ❌");
+      }
+  }, 3000);
+});
+
+
+// Yeh upar ab humne ek promise create kardiya, yaani yeh ek async piece of code hai jo 3 sec wait karega aur yeh uske baad ya toh
+// resolve hojayega ya reject. ab iss promise ko hum consume karenge :-
+
+chaiBanaPromise.then((successMessage)=>{
+  console.log("Success:-",successMessage)
+}).catch((errorMessage)=>{
+ console.log("Error:-",errorMessage)
+});
+
+// aise samajh ki in future aapke paas kuch data aayega, ya kuch bhi hoyega and for handling that you are using an object called promise.
+
+// challenge:-
+
+let PizzaHandlePromise = new Promise((resolve,reject)=>{
+   setTimeout(()=>{
+    let RestaurantOpen = true;
+    if(RestaurantOpen == true){
+      resolve("Pizza is cooked !")
+    }
+    else{
+      reject("Restaurant not open !")
+    }
+   },3000)
+});
+
+
+PizzaHandlePromise.then((message)=>{
+  console.log(message)
+}).catch((message)=>{
+  console.log(message)
+});
+
+
+let TicketBooking = new Promise((resolve,reject)=>{
+  console.log("Begin the process of ticket booking !!")
+  setTimeout(()=>{
+    let book = Math.random() > 0.5;
+    if(book == true){
+      resolve("ticket booked");
+    }
+    else{
+      reject("ticket rejected");
+    }
+  },2000)
 })
 
-
-p.then(function(){
-    console.log("Promise Got Resolved !!!")
-  }
-).catch(function(){
-  console.log("Promise got Rejected !!!")
+TicketBooking.then((BookMessage)=>{
+console.log(BookMessage);
+return new Promise((resolve,reject)=>{
+  setTimeout(()=>{
+   
+  },2000)
+})
 })
