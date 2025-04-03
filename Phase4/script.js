@@ -130,3 +130,24 @@ function downloadData(fileName, afterDownload) {
   // KI MERA KOI PARTICULAR FUNCTION TAB EXECUTE HOYE JAB USSE KOI CUE MILE, LIKE KOI EVENT HOYE. ISLIYE CALLBACKS KA SABSE
   // COMMON AND IMPORTANT REAL LIFE USE CASE HAI EVENT-LISTENERS, JO EK CALLBACK LETE HAI, WHICH MEANS, EVENT TRIGGER HOTE HI 
   // CALLBACK EXECUTE HOJAYEGA.
+
+  // let us do a challenge to understand it better.
+
+// Can you write a function called calculateDouble that:
+// Takes a number and a callback function
+// Doubles the number
+// Passes the result to the callback
+
+
+function calculateDouble(num,callback){
+    num=num*2;
+    callback(num);
+}
+
+function callback(result){
+    console.log("The Result is :- ",result);
+}
+
+calculateDouble(10,callback);
+
+// ab yaha upar, humne 
