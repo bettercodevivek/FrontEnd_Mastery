@@ -150,4 +150,54 @@ function callback(result){
 
 calculateDouble(10,callback);
 
-// ab yaha upar, humne 
+// ab yaha upar, humne pehle num pass kara as argument, uspe operate kara and after that callback mein usse pass kara. ab agar yaha
+// callback hum bahar hi likhdete as a sync code toh num pe operation hone se pehle hi result aajata jo undefined hota.
+
+// checkIfUserExists('john@example.com', function(exists) {
+//   if (!exists) {
+//     createUser('john@example.com', 'John', function(user) {
+//       console.log("User created:", user);
+      
+//       sendWelcomeEmail(user.email, function(success) {
+//         if (success) {
+//           addToNewsletter(user.email, function(subscribed) {
+//             if (subscribed) {
+//               createFirstProject(user.id, function(project) {
+//                 console.log("First project created for", user.name);
+                
+//                 redirectToWelcomePage(user, project, function() {
+//                   console.log("Registration process completed!");
+//                 });
+//               });
+//             }
+//           });
+//         }
+//       });
+//     });
+//   } else {
+//     console.log("User already exists!");
+//   }
+// });
+
+// Toh basically, yeh callback hell se bachne ke liye, we can use promises in js.
+
+// A Promise is like an IOU (I Owe You) in JavaScript.
+// It's an object that represents a future value - something that doesn't exist yet but will (hopefully) exist later.
+
+let p = new Promise((resolve,reject)=>{
+  let a = 3+2;
+  if(a===4){
+    return resolve();
+  }
+  else{
+    return reject();
+  }
+})
+
+
+p.then(function(){
+    console.log("Promise Got Resolved !!!")
+  }
+).catch(function(){
+  console.log("Promise got Rejected !!!")
+})
