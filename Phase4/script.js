@@ -188,96 +188,96 @@ calculateDouble(10,callback);
 
 // AB PROMISE BASICALLY EXAMPLE SE SAMAJH:- 
 
-let chaiBanaPromise = new Promise((resolve, reject) => {
-  console.log("Gas on, paani garam ho raha hai...");
+// let chaiBanaPromise = new Promise((resolve, reject) => {
+//   console.log("Gas on, paani garam ho raha hai...");
 
-  setTimeout(() => {
-      let gasAvailable = true; // Try false to test reject case
+//   setTimeout(() => {
+//       let gasAvailable = true; // Try false to test reject case
 
-      if (gasAvailable) {
-          resolve("Chai ready! ☕");
-      } else {
-          reject("Gas khatam ho gayi! ❌");
-      }
-  }, 3000);
-});
+//       if (gasAvailable) {
+//           resolve("Chai ready! ☕");
+//       } else {
+//           reject("Gas khatam ho gayi! ❌");
+//       }
+//   }, 3000);
+// });
 
 
 // Yeh upar ab humne ek promise create kardiya, yaani yeh ek async piece of code hai jo 3 sec wait karega aur yeh uske baad ya toh
 // resolve hojayega ya reject. ab iss promise ko hum consume karenge :-
 
-chaiBanaPromise.then((successMessage)=>{
-  console.log("Success:-",successMessage)
-}).catch((errorMessage)=>{
- console.log("Error:-",errorMessage)
-});
+// chaiBanaPromise.then((successMessage)=>{
+//   console.log("Success:-",successMessage)
+// }).catch((errorMessage)=>{
+//  console.log("Error:-",errorMessage)
+// });
 
 // aise samajh ki in future aapke paas kuch data aayega, ya kuch bhi hoyega and for handling that you are using an object called promise.
 
 // challenge:-
 
-let PizzaHandlePromise = new Promise((resolve,reject)=>{
-   setTimeout(()=>{
-    let RestaurantOpen = true;
-    if(RestaurantOpen == true){
-      resolve("Pizza is cooked !")
-    }
-    else{
-      reject("Restaurant not open !")
-    }
-   },3000)
-});
+// let PizzaHandlePromise = new Promise((resolve,reject)=>{
+//    setTimeout(()=>{
+//     let RestaurantOpen = true;
+//     if(RestaurantOpen == true){
+//       resolve("Pizza is cooked !")
+//     }
+//     else{
+//       reject("Restaurant not open !")
+//     }
+//    },3000)
+// });
 
 
-PizzaHandlePromise.then((message)=>{
-  console.log(message)
-}).catch((message)=>{
-  console.log(message)
-});
+// PizzaHandlePromise.then((message)=>{
+//   console.log(message)
+// }).catch((message)=>{
+//   console.log(message)
+// });
 
 
-let TicketBooking = new Promise((resolve,reject)=>{
-  console.log("Begin the process of ticket booking !!")
-  setTimeout(()=>{
-    let confirmed = Math.random() > 0.5;
-    if(confirmed){
-      resolve("ticket booked");
-    }
-    else{
-      reject("ticket rejected");
-    }
-  },2000)
-})
+// let TicketBooking = new Promise((resolve,reject)=>{
+//   console.log("Begin the process of ticket booking !!")
+//   setTimeout(()=>{
+//     let confirmed = Math.random() > 0.5;
+//     if(confirmed){
+//       resolve("ticket booked");
+//     }
+//     else{
+//       reject("ticket rejected");
+//     }
+//   },2000)
+// })
 
-TicketBooking.then((message)=>{
- console.log(message);
- return new Promise((resolve,reject)=>{
-   setTimeout(()=>{
-    let TrainArrived = Math.random() > 0.5;
-    if(TrainArrived){
-      resolve("Train has arrived")
-    }
-    else{
-      reject("Train couldn't arrive on time !")
-    }
-   },3000)
- })
-}).then((message)=>{
-  console.log(message)
-  return new Promise((resolve,reject)=>{
-    setTimeout(()=>{
-      let TrainBoarded = Math.random > 0.5
-      if(TrainBoarded){
-       resolve("I have boarded the train !")
-      }
-      else{
-        reject("I couldn't board the train !")
-      }
-   },3000)
-  })
-}).catch((error)=>{
-  console.log(error)
-});
+// TicketBooking.then((message)=>{
+//  console.log(message);
+//  return new Promise((resolve,reject)=>{
+//    setTimeout(()=>{
+//     let TrainArrived = Math.random() > 0.5;
+//     if(TrainArrived){
+//       resolve("Train has arrived")
+//     }
+//     else{
+//       reject("Train couldn't arrive on time !")
+//     }
+//    },3000)
+//  })
+// }).then((message)=>{
+//   console.log(message)
+//   return new Promise((resolve,reject)=>{
+//     setTimeout(()=>{
+//       let TrainBoarded = Math.random > 0.5
+//       if(TrainBoarded){
+//        resolve("I have boarded the train !")
+//       }
+//       else{
+//         reject("I couldn't board the train !")
+//       }
+//    },3000)
+//   })
+// }).catch((error)=>{
+//   console.log(error)
+// });
 
 
 // Now, the promise that we have consumed above, we have use chaining, but in the chain of promises, we have used promises
@@ -292,69 +292,214 @@ TicketBooking.then((message)=>{
 // Product ship kare (3s, 50% fail chance)
 // Agar kahin bhi fail ho gaya, error print ho.
 
-let OnlineShoppingSystem = new Promise((resolve,reject)=>{
+// function OnlineShoppingSystem(){
+//   return new Promise((resolve,reject)=>{
+//     setTimeout(()=>{
+//       let orderPlace = Math.random() > 0.5;
+//       if(orderPlace){
+//         resolve("Order Place Successfully !!!")
+//       }
+//       else{
+//         reject("Order Couldn't be placed")
+//       }
+//     },2000)
+//   })
+// } 
+
+// function PaymentProcessing(){
+//    return new Promise((resolve,reject)=>{
+//   setTimeout(()=>{
+//     let PaymentProcess = Math.random() > 0.5;
+//       if(PaymentProcess){
+//         resolve("Payment has been processed !!!")
+//       }
+//       else{
+//         reject("Payment Failed !!!")
+//       }
+//   },3000)
+//    })
+// }
+
+// function ProductPacking(){
+//   return new Promise((resolve,reject)=>{
+//     setTimeout(()=>{
+//       let ProductPacked = Math.random() > 0.5;
+//       if(ProductPacked){
+//         resolve("product has been packed successfully")
+//       }
+//       else{
+//         reject("Product couldn't be packed")
+//       }
+//     },3000)
+//   })
+// }
+
+// function ProductShipping(){
+//   return new Promise((resolve,reject)=>{
+//     setTimeout(()=>{
+//       let productShipped = Math.random() > 0.5;
+//       if(productShipped){
+//         resolve("Product Shipped Successfully !")
+//       }
+//       else{
+//         reject("Product shipping failed !")
+//       }
+//     },3000)
+//   })
+// }
+
+// OnlineShoppingSystem.then((message)=>{
+//   console.log(message)
+//   return PaymentProcessing();
+// }).then((message)=>{
+//   console.log(message);
+//   return ProductPacking();
+// }).then((message)=>{
+//   console.log(message)
+//   return ProductShipping();
+// }).catch((error)=>{
+//   console.log(error)
+// })
+
+// ASYNC AWAIT 
+
+// Yeh Promises ka hi upgrade hai, lekin aur readable, aur natural lagta hai jaise hum normally likhte hain.
+
+// async function DoShopping(){
+//    try{
+//     let OnlineShopping = await OnlineShoppingSystem();
+//     console.log(OnlineShopping)
+  
+//     let Payment = await PaymentProcessing();
+//     console.log(Payment);
+  
+//     let Product = await ProductPacking();
+//     console.log(Product)
+  
+//     let Shipping = await ProductShipping();
+//     console.log(Shipping)
+//   }
+//   catch(error){
+//     console.log(error)
+//   }
+// }
+
+// DoShopping()
+
+// Challenge: Movie Night System using async/await
+// Steps:
+// Buy movie ticket (50% chance fail)
+// Enter theatre
+// Watch movie
+// Review movie
+
+// lets trying solving in both ways using promises then and then using async await.
+
+//  1st. Using then()
+
+let MovieNightSystem = new Promise((resolve,reject)=>{
   setTimeout(()=>{
-    let orderPlace = Math.random() > 0.5;
-    if(orderPlace){
-      resolve("Order Place Successfully !!!")
+    let MovieTicket = Math.random() > 0.5;
+    if(MovieTicket){
+      resolve("movie ticket bought successfully !!!")
     }
     else{
-      reject("Order Couldn't be placed")
+      reject("movie ticket buying failed !!!")
     }
   },2000)
 })
 
-function PaymentProcessing(){
-   return new Promise((resolve,reject)=>{
-  setTimeout(()=>{
-    let PaymentProcess = Math.random() > 0.5;
-      if(PaymentProcess){
-        resolve("Payment has been processed !!!")
-      }
-      else{
-        reject("Payment Failed !!!")
-      }
-  },3000)
-   })
-}
-
-function ProductPacking(){
-  return new Promise((resolve,reject)=>{
+function EnterTheatre(){
+  return new Promise((resolve)=>{
     setTimeout(()=>{
-      let ProductPacked = Math.random() > 0.5;
-      if(ProductPacked){
-        resolve("product has been packed successfully")
-      }
-      else{
-        reject("Product couldn't be packed")
-      }
-    },3000)
+       resolve("Entered In Theatre")
+    },2000)
   })
 }
 
-function ProductShipping(){
-  return new Promise((resolve,reject)=>{
+function WatchMovie(){
+  return new Promise((resolve)=>{
     setTimeout(()=>{
-      let productShipped = Math.random() > 0.5;
-      if(productShipped){
-        resolve("Product Shipped Successfully !")
-      }
-      else{
-        reject("Product shipping failed !")
-      }
-    },3000)
+      resolve("Watching movie now !")
+    },2000)
   })
 }
 
-OnlineShoppingSystem.then((message)=>{
-  console.log(message)
-  return PaymentProcessing();
-}).then((message)=>{
+function ReviewMovie(){
+  return new Promise((resolve)=>{
+    resolve("reviewed the movie!!")
+  })
+}
+
+MovieNightSystem.then((message)=>{
   console.log(message);
-  return ProductPacking();
+  return EnterTheatre();
 }).then((message)=>{
   console.log(message)
-  return ProductShipping();
+  return WatchMovie();
+}).then((message)=>{
+  console.log(message)
+  return ReviewMovie();
 }).catch((error)=>{
   console.log(error)
-})
+});
+
+function MovieNightSystem2(){
+  return new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+      let movieTicket = Math.random() < 0.5;
+    if(movieTicket){
+      resolve("Movie Ticket Booked Successfully !!")
+    }
+    else{
+      reject("Movie Ticked Failed !!!")
+    }
+    },2000)
+  })
+}
+
+function EnterTheatre2(){
+  return new Promise((resolve)=>{
+    setTimeout(()=>{
+      resolve("Entered Theatre Successfully!!")
+    },2000)
+  })
+}
+
+function WatchMovie2(){
+  return new Promise((resolve)=>{
+    setTimeout(()=>{
+      resolve("watched movie !!!")
+    },2000)
+  })
+}
+
+function ReviewMovie2(){
+  return new Promise((resolve)=>{
+    setTimeout(()=>{
+      resolve("Reviewd Movie!!!")
+    },2000)
+  })
+}
+
+async function WatchingMovie(){
+
+  try{
+    let MovieNight = await MovieNightSystem2();
+    console.log(MovieNight)
+  
+    let Theatre = await EnterTheatre2();
+    console.log(Theatre)
+  
+    let WatchM = await WatchMovie2();
+    console.log(WatchM)
+  
+    let ReviewM = await ReviewMovie2();
+    console.log(ReviewM)
+  }
+  catch(error){
+    console.log(error)
+  }
+}
+
+WatchingMovie();
