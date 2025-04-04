@@ -239,8 +239,8 @@ PizzaHandlePromise.then((message)=>{
 let TicketBooking = new Promise((resolve,reject)=>{
   console.log("Begin the process of ticket booking !!")
   setTimeout(()=>{
-    let book = Math.random() > 0.5;
-    if(book == true){
+    let confirmed = Math.random() > 0.5;
+    if(confirmed){
       resolve("ticket booked");
     }
     else{
@@ -249,11 +249,112 @@ let TicketBooking = new Promise((resolve,reject)=>{
   },2000)
 })
 
-TicketBooking.then((BookMessage)=>{
-console.log(BookMessage);
-return new Promise((resolve,reject)=>{
+TicketBooking.then((message)=>{
+ console.log(message);
+ return new Promise((resolve,reject)=>{
+   setTimeout(()=>{
+    let TrainArrived = Math.random() > 0.5;
+    if(TrainArrived){
+      resolve("Train has arrived")
+    }
+    else{
+      reject("Train couldn't arrive on time !")
+    }
+   },3000)
+ })
+}).then((message)=>{
+  console.log(message)
+  return new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+      let TrainBoarded = Math.random > 0.5
+      if(TrainBoarded){
+       resolve("I have boarded the train !")
+      }
+      else{
+        reject("I couldn't board the train !")
+      }
+   },3000)
+  })
+}).catch((error)=>{
+  console.log(error)
+});
+
+
+// Now, the promise that we have consumed above, we have use chaining, but in the chain of promises, we have used promises
+// without storing in a variable and directly returning them.
+
+// let us see the example of online shopping system with stored promises now !
+
+// Ek "Online Shopping System" banao jo:
+// Order place kare (2s, 50% fail chance)
+// Payment process kare (3s, 50% fail chance)
+// Product pack kare (2s, 50% fail chance)
+// Product ship kare (3s, 50% fail chance)
+// Agar kahin bhi fail ho gaya, error print ho.
+
+let OnlineShoppingSystem = new Promise((resolve,reject)=>{
   setTimeout(()=>{
-   
+    let orderPlace = Math.random() > 0.5;
+    if(orderPlace){
+      resolve("Order Place Successfully !!!")
+    }
+    else{
+      reject("Order Couldn't be placed")
+    }
   },2000)
 })
+
+function PaymentProcessing(){
+   return new Promise((resolve,reject)=>{
+  setTimeout(()=>{
+    let PaymentProcess = Math.random() > 0.5;
+      if(PaymentProcess){
+        resolve("Payment has been processed !!!")
+      }
+      else{
+        reject("Payment Failed !!!")
+      }
+  },3000)
+   })
+}
+
+function ProductPacking(){
+  return new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+      let ProductPacked = Math.random() > 0.5;
+      if(ProductPacked){
+        resolve("product has been packed successfully")
+      }
+      else{
+        reject("Product couldn't be packed")
+      }
+    },3000)
+  })
+}
+
+function ProductShipping(){
+  return new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+      let productShipped = Math.random() > 0.5;
+      if(productShipped){
+        resolve("Product Shipped Successfully !")
+      }
+      else{
+        reject("Product shipping failed !")
+      }
+    },3000)
+  })
+}
+
+OnlineShoppingSystem.then((message)=>{
+  console.log(message)
+  return PaymentProcessing();
+}).then((message)=>{
+  console.log(message);
+  return ProductPacking();
+}).then((message)=>{
+  console.log(message)
+  return ProductShipping();
+}).catch((error)=>{
+  console.log(error)
 })
