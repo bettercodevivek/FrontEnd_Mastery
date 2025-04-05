@@ -126,3 +126,84 @@ async function SubmitData2(){
 SubmitData2();
 
 // Let us now Study about Events in JS, basically all those events that can happen on a page in browser.
+
+// 1. click event
+
+// element_name.addEventListener('click',callback)
+
+const SubBtn = document.getElementById('subBtn');
+const statusHeading = document.getElementById('status');
+
+SubBtn.addEventListener('click',(e)=>{
+    console.log(e.target)
+    statusHeading.textContent = "Subscribed ✅";
+    e.target.textContent = "JAI SHREE RAM"
+})
+
+// document.addEventListener('click',(e)=>{
+//     console.log(e.clientX)
+// })
+
+// Ab ek cheez samajhte hai :- Whenever an event is triggered, 
+// JavaScript passes an object to your callback. This object contains tons of useful information.
+
+// yeh event object hota hai, jiski bhaut saari useful properties hoti hai :- 
+
+// Property	                                What it tells you
+
+// event.type	                            Type of event (e.g. "click", "keydown")
+// event.target	                            The actual element that triggered the event
+// event.clientX	                        X position of the mouse on screen
+// event.clientY	                        Y position of the mouse on screen
+// event.key	                            Key pressed (useful in keyboard events)
+// event.preventDefault()	                Stops default behavior (like form submission)
+
+// challenge 
+
+let score = document.getElementById('score')
+let currentScore=0;
+
+const buttons = document.querySelectorAll('.scoreBtn')
+
+buttons.forEach((btn)=>{
+    btn.addEventListener('click',(e)=>{
+        let value = parseInt(e.target.textContent);
+        currentScore+=value;
+        score.textContent = currentScore;
+    })
+})
+
+// document.addEventListener('keydown', (event) => {
+//     console.log("Key Pressed:", event.code);
+//   });
+  
+
+// Now lets us learn about key events :- 
+
+// There are mainly 2 key events => keydown and keyup.
+
+// and there are 2 event properties for keys:- event.key gives us key pressed and event.code gives physical location of key.
+
+let KeyStatus = document.getElementById('keyStatus')
+
+let CurrScore = document.getElementById('Keyscore')
+
+let Value = 0;
+
+document.addEventListener('keydown',(e)=>{
+    if(e.code === 'Enter'){
+        KeyStatus.textContent = "Ready To Play !"
+    }
+    else if(e.code === 'Escape'){
+        KeyStatus.textContent = "Game Paused !"
+    }
+    else if(e.key === 'r'){
+        KeyStatus.textContent = "Game Reset !"
+        Value = 0;
+        CurrScore.textContent = Value;
+    }
+    else{
+        Value+=1;
+        CurrScore.textContent=Value;
+    }
+})
