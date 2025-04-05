@@ -630,3 +630,76 @@ Party()
 // TOh basically all wala kaam hi karega allSettled() , lekin it will return an array with outcome of all the tasks whether
 // they are resolved or rejected, unlike all jo sirf resolved ya reject ke messages dega
 
+// Promise.race()
+
+// It runs all promises in parallel, but returns the result of whichever finishes first, whether it’s success or failure.
+
+// in simple words, jisne pehle finishing line touch kari woh winner, uska result aayega doesnt matter if its a resolve or a reject.
+
+// and yes, it directly depends on the timing given in setTimeout, yaani 1000ms wala 2000ms wale se pehle hoga and uska hi result 
+// display hoga, despite of it being a reject.
+
+// Promise.any()
+
+// Promise.any() exactly wohi karega jo promise.race() karta hai, parallel run karta hai, but yeh fastest response nhi deta, yeh 
+// first successful response deta hai yeh, reject ko ignore kardeta.
+
+// let us see an example :- 
+
+function Friend1(){
+  return new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+      let chance = Math.random() > 0.5;
+      if(chance){
+        resolve("Friend 1 is ready for meetup !")
+      }
+      else{
+        reject("Friend 1 is not available !")
+      }
+    },2000)
+  })
+}
+
+function Friend2(){
+  return new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+      let chance = Math.random() > 0.5;
+      if(chance){
+        resolve("Friend 2 is ready for meetup !")
+      }
+      else{
+        reject("Friend 2 is not available !")
+      }
+    },2000)
+  })
+}
+
+function Friend3(){
+  return new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+      let chance = Math.random() > 0.5;
+      if(chance){
+        resolve("Friend 3 is ready for meetup !")
+      }
+      else{
+        reject("Friend 3 is not available !")
+      }
+    },2000)
+  })
+}
+  
+  async function Meeting(){
+    try{
+      const result = await Promise.any([
+        Friend1(),Friend2(),Friend3()
+      ])
+
+      console.log(result)
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
+
+  Meeting()
+  
