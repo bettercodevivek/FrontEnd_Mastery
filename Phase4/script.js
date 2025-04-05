@@ -503,3 +503,130 @@ async function WatchingMovie(){
 }
 
 WatchingMovie();
+
+// Now let us learn about Promise.all() 
+
+// You have three async tasks:
+
+//  Order Pizza (2 sec)
+
+//  Get Cold Drink (1.5 sec)
+
+//  Make Popcorn (1 sec)
+
+// Now, normally in async/await, you’d do: 
+
+function OrderPizza(){
+  return new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+      let Order = Math.random() < 0.5;
+      if(Order){
+        resolve("Pizza Order Success !!!")
+      }
+      else{
+        reject("Pizza Order Failed !!!")
+      }
+    },2000)
+  })
+}
+
+function GetColdDrink(){
+  return new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+      let BuyColdDrink = Math.random() < 0.5;
+      if(BuyColdDrink){
+          resolve("Bought Cold Drink !")
+      }
+      else{
+        reject("Couldn't buy cold drink !")
+      }
+    },1500)
+  })
+}
+
+function MakePopcorn(){
+  return new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+      let PopCorn = Math.random() < 0.5;
+      if(PopCorn){
+        resolve("Popcorn Made !")
+      }
+      else{
+        reject("Popcorn failed !")
+      }
+    },1000)
+  })
+}
+
+// async function Party(){
+  
+//   try{
+//   let Pizza = await OrderPizza();
+//   console.log(Pizza)
+
+//   let Cold = await GetColdDrink();
+//   console.log(Cold)
+
+//   let Popcorn = MakePopcorn();
+//   console.log(Popcorn)
+//   }
+//   catch(error){
+//     console.log(error)
+//   }
+
+// }
+
+// Party()
+
+// now lets implement the above using Promise.all()
+
+async function Party(){
+  try{
+   const results = await Promise.all([
+     OrderPizza() , GetColdDrink() , MakePopcorn()
+   ])
+   console.log(results)
+  }
+ catch(error){
+   console.log(error)
+ }
+}
+
+Party()
+
+// ab promise.all ko samjho ki yeh kya kar raha, kyuki jab hum individual promise wala await lga skte hai, why use promise.all
+// simple explanation hai:- jab hum async await use karte hai, ek ek karke tasks execute karte hai , toh async hote hue bhi behaviour
+// sync code wala hota hai, yaani sequence mein execution hona , for example:- agar 3 tasks hai :- and they take following time:-
+// 2s , 3s , 2s => toh yaha total time => 7s lagega, lekin if we use promiseall() , toh saare parallel execute hona shuru kardenge,
+// toh yaha 3s mein teeno hojayenge.
+
+// The JavaScript thread doesn’t block, that’s the async benefit 
+// But your code still runs step-by-step, so overall time = sum of all durations 
+// Even though async/await is non-blocking, sequential awaits still happen one-after-another unless 
+// you intentionally make them run in parallel — and that’s why Promise.all() is a performance booster 
+
+async function Party(){
+   try{
+    const results = await Promise.allSettled([
+      OrderPizza() , GetColdDrink() , MakePopcorn()
+    ])
+    console.log(results)
+   }
+  catch(error){
+    console.log(error)
+  }
+}
+
+Party()
+
+// What is Promise.allSettled()?
+// It runs all the promises in parallel (like Promise.all),
+// but it never fails — it gives you a report of all the results,
+// whether they succeeded  or failed.
+
+// Use when you care about all results, not just the successful ones
+// Promise.all() would stop at the first failure, throwing away others
+
+// TOh basically all wala kaam hi karega allSettled() , lekin it will return an array with outcome of all the tasks whether
+// they are resolved or rejected, unlike all jo sirf resolved ya reject ke messages dega
+
