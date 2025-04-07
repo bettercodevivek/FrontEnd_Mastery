@@ -207,3 +207,46 @@ document.addEventListener('keydown',(e)=>{
         CurrScore.textContent=Value;
     }
 })
+
+
+// Now let us learn about some form events 
+
+// 1. submit event
+
+// triggered when form is submitted 
+
+ const form = document.getElementById('form1');
+
+
+ form.addEventListener('submit',(e)=>{
+    e.preventDefault();
+    let name_value=document.getElementById('username').value;
+    console.log("Form Submitted By :- ",name_value)
+ })
+
+ // toh basically submit event ki help se hum form submission ke time pe kuch bhi karva sakte hai. For example :- one of the
+ // most imp use cases is :- event.preventDefault() , this basically prevents the default behaviour of form which is whenever
+ // a form is submitted, it reloads the entire page.
+
+ // 2. input event
+
+ // Jab user type karta hai input field me, ye har ek character par trigger hota hai.
+
+ form.addEventListener('input',(e)=>{
+    let value1 = document.getElementById('input1').value;
+    console.log(value1)
+ })
+
+ // in console, every character gets printed as it is typed in input , this can be used for live character count and search suggestions.
+
+
+ // 3. reset event
+
+ // triggered when form is reset using a reset type button
+
+ form.addEventListener('reset',()=>{
+    console.log("form Reset !")
+ })
+ 
+
+ // So, these are some major form events that important , rest you can learn during project building !
