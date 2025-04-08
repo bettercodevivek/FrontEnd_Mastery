@@ -250,3 +250,5 @@ document.addEventListener('keydown',(e)=>{
  
 
  // So, these are some major form events that important , rest you can learn during project building !
+
+ // This is mostly everything that could be covered in core javascript. Keep revising this and stay ahead of competition !
