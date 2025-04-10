@@ -29,15 +29,10 @@ console.log("hello i am node js")
     // Total system memory
 
 const os = require("os")
-const { default: Add } = require("./func");
-console.log(Add(50,43))
 let file_name = __filename;
 let dir_name =  __dirname;
 let platform = os.platform()
 let sys_mem = os.totalmem()
-
-const result= Add(50,32);
-console.log(result)
 
 console.table({file_name,dir_name,platform,sys_mem})
 
@@ -60,6 +55,9 @@ console.table({file_name,dir_name,platform,sys_mem})
 // const add = (a, b) => a + b;
 // module.exports = { add };
 
+const {add} = require('./math')
+console.log(add(4,5))
+
 //  app.js
 // const { add } = require('./math');
 // console.log(add(2, 3)); // 5 }
@@ -76,4 +74,9 @@ console.table({file_name,dir_name,platform,sys_mem})
 
 
 // Abhi ke liye we will be using common js system
+
+// Now lets get started with fs module :-
+
+// fs stands for File System — Node.js ka built-in module to: - read files, write files , create/delete files , work with folders, check if file exists
+
 
