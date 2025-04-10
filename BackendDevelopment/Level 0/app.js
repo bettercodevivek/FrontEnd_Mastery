@@ -45,3 +45,35 @@ console.table({file_name,dir_name,platform,sys_mem})
 // ab upar yeh example thoda complex lag raha hoga, because here we ran into something called modules:- toh simple bhasha mein samjahte hai ki
 // yeh common js aur es module kya hai
 
+// dekh bro, jab aap multiple files ke saath work karte ho, certain times aapko kisi dusre file ke functions current file mein use karne pad sakte hai
+// and uske liye aap uss file ko import karte ho, toh yehi module system hai, large code ko small parts mein break karke , import export karke use karna
+
+// CommonJS aur ES Modules = bas 2 different styles / tarike to use other JS files inside your main file.
+// Jaise ki jab tu ek feature ko alag file mein likhta hai, aur usse import karta hai — that’s a module system.
+
+// CommonJS	Ye Node.js ka default module system hai (jab tak tu type: module nahi lagata)
+
+// ES Modules	Ye modern JS browsers ka style hai (ES6 se aaya) — aur ab Node mein bhi aagaya, but you have to enable it
+
+// example of how importing and exporting files work in cjs => {
+// math.js
+// const add = (a, b) => a + b;
+// module.exports = { add };
+
+//  app.js
+// const { add } = require('./math');
+// console.log(add(2, 3)); // 5 }
+
+// example of how importing and exporting files work in esm => { math.js
+// export function add(a, b) {
+//     return a + b;
+//   }
+  
+//   // app.js
+//   import { add } from './math.js';
+//   console.log(add(2, 3)); // 5
+//   }
+
+
+// Abhi ke liye we will be using common js system
+
