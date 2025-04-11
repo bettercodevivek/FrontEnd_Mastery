@@ -55,8 +55,8 @@ console.table({file_name,dir_name,platform,sys_mem})
 // const add = (a, b) => a + b;
 // module.exports = { add };
 
-const {add} = require('./math')
-console.log(add(4,5))
+// const {add} = require('./math')
+// console.log(add(4,5))
 
 //  app.js
 // const { add } = require('./math');
@@ -80,3 +80,62 @@ console.log(add(4,5))
 // fs stands for File System — Node.js ka built-in module to: - read files, write files , create/delete files , work with folders, check if file exists
 
 
+// starting with basics of reading and writing a file (sync + async)
+
+// 1. Read File (sync)
+
+const fs = require("fs")
+console.log("before reading file")
+const data = fs.readFileSync("data.txt","utf-8")
+console.log("File Content :- ", data);
+console.log("after reading file")
+
+// 2. Read File (Async)
+
+console.log("Before reading file in async")
+fs.readFile("data.txt","utf-8",(error,data1)=>{
+    if(error){
+        console.log(error)
+        return;
+    }
+    console.log("data:-",data1)
+})
+
+console.log("After reading file in async")
+
+// Even though console.log("After reading file in async") is written after fs.readFile() call...
+
+// It runs before the file content prints. Why?
+// Because readFile() is async — it tells Node:
+
+//     "Hey, start reading the file in the background, and meanwhile continue with rest of the code."
+
+// 3. Write File (Sync)
+
+fs.writeFileSync("data.txt","This file got overwritten by synchronous method of writing file using fs module")
+
+console.log("File Written Successfully Synchronously !")
+
+// 4. Write File(Async)
+
+fs.writeFile("data.txt","This file got overwritten asynchronously",(err)=>{
+    if(err){
+        console.log("An Error Ocurred !")
+        return;
+    }
+    console.log("File Overwritten in async success !")
+})
+
+const fsp = require("fs/promises")
+
+async function run(){
+    try{
+       const data = await fsp.readFile("data.txt","utf-8");
+        console.log(data)
+    }
+    catch(err){
+        console.log("An Error Occured :- ",err)
+    }
+}
+
+run()
