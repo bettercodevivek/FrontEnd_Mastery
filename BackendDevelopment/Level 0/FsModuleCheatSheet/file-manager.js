@@ -74,3 +74,57 @@ switch(command){
      renameFile();
      break;
 }
+
+
+// HERE'S A CHEATSHEET TO UNDERSTAND FS MODULE, SPECIFICALLY USING 'FS/PROMISES' 
+// fs-cheatsheet.js
+const fs = require('fs/promises');
+
+// Wrap all in an async IIFE
+(async function main() {
+  try {
+    // 1️⃣ Read a file
+    const readData = await fs.readFile('data.txt', 'utf-8');
+    console.log('📖 Read:', readData);
+
+    // 2️⃣ Write to a file (creates or overwrites)
+    await fs.writeFile('notes.txt', 'Hello from Node.js!', 'utf-8');
+    console.log('✍️ File written');
+
+    // 3️⃣ Append content to file
+    await fs.appendFile('notes.txt', '\nThis is new content.', 'utf-8');
+    console.log('🧩 Content appended');
+
+    // 4️⃣ Rename a file
+    await fs.rename('notes.txt', 'renamed-notes.txt');
+    console.log('🏷️ File renamed');
+
+    // 5️⃣ Delete a file
+    await fs.unlink('old.txt');
+    console.log('🗑️ File deleted');
+
+    // 6️⃣ Create folder (recursive)
+    await fs.mkdir('logs/debug', { recursive: true });
+    console.log('📁 Folder created');
+
+    // 7️⃣ Remove folder (only if empty)
+    await fs.rmdir('logs/debug');
+    console.log('❌ Folder deleted');
+
+    // 8️⃣ Read all files/folders in directory
+    const items = await fs.readdir('./');
+    console.log('📂 Dir contents:', items);
+
+    // 9️⃣ Get metadata
+    const stats = await fs.stat('renamed-notes.txt');
+    console.log('📊 File stats:', stats.isFile(), stats.size);
+
+  } catch (err) {
+    console.error('❌ Error:', err.message);
+  }
+})();
+
+
+// IIFE are immediated invoked function expresasion, its basically wrapping a function like this :- (function name(){})();
+// it serves one primary purpose and that is that iife functions need not be called explicitly rather they are executed immediately 
+// when the js file is run.
