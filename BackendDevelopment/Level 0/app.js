@@ -126,16 +126,16 @@ fs.writeFile("data.txt","This file got overwritten asynchronously",(err)=>{
     console.log("File Overwritten in async success !")
 })
 
-const fsp = require("fs/promises")
+// const fsp = require("fs/promises")
 
-async function run(){
-    try{
-       const data = await fsp.readFile("data.txt","utf-8");
-        console.log(data)
-    }
-    catch(err){
-        console.log("An Error Occured :- ",err)
-    }
-}
+// async function run(){
+//     try{
+//        const data = await fsp.readFile("data.txt","utf-8");
+//         console.log(data)
+//     }
+//     catch(err){
+//         console.log("An Error Occured :- ",err)
+//     }
+// }
 
-run()
+// run()
