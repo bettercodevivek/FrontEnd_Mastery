@@ -42,24 +42,66 @@
 
 const path = require('path');
 
-const fs = require('fs/promises')
+// const fs = require('fs/promises')
 // 1. path.join()
 
 // Safely joins folder paths — handles / or \ automatically
 
 const filePath = path.join("folder","subfolder","data.txt");
 
-(async function FileMaker(){
-   try{
-    await fs.writeFile(filePath,"Wrote this file")
-    console.log(`file created at ${filePath}`)
-   }
-   catch(err){
-    console.log(err)
-   }
-})();
+// (async function FileMaker(){
+//    try{
+//     await fs.writeFile(filePath,"Wrote this file")
+//     console.log(`file created at ${filePath}`)
+//    }
+//    catch(err){
+//     console.log(err)
+//    }
+// })();
+
+// Use case: Creating cross-platform friendly paths for saving files
 
 // toh agar upar ke example ko dekhe, path.join() se we can simply create a file path, and then we can store it in a variable and
 // we can use it to pass it as an argument in other methods where we might need a file path, for example:- writeFile(), it will
 // write the file in that path, now why is it good, it makes the code cleaner and easier to resolve in future.
+
+// 2. path.resolve()
+
+// Builds an absolute path starting from current file or root
+
+const absPath = path.resolve("folder","data1.txt")
+console.log(absPath)
+
+// Use case: When you want full path for reading/writing files
+
+// 3. path.basename(filepath)
+
+// Gets the filename from a path
+
+const fileName = path.basename("BackendDevelopment/Level 0/PathModule/folder/subfolder/data.txt")
+console.log(fileName)
+
+// when file path is like this by default => (BackendDevelopment\Level 0\PathModule\folder\subfolder\data.txt), meaning \ is used
+// as separator , it creates a problem as in most langs including js \ is an escape sequence which leads the language to interpret it differently
+// leading to errors, so to fix this:- either replace \ with /  or use \\ .
+
+// 4. path.extname(filepath)
+
+// Gets the extension of a file
+
+// Validate file types (e.g., only allow .jpg, .png, etc)
+
+const extname = path.extname("BackendDevelopment/Level 0/PathModule/folder/subfolder/data.txt")
+
+console.log(extname) // gives .txt
+
+// 5. path.dirname(filepath)
+
+// Gets the directory part of a path
+
+// Useful when you want to check or create parent folders
+
+const dirname = path.dirname("BackendDevelopment/Level 0/PathModule/folder/subfolder/data.txt")
+
+console.log(dirname)
 
