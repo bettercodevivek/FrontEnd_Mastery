@@ -146,17 +146,82 @@ emitter1.on("Hello",()=>{
 
 // So, LETS DO A CHALLENGE TO CEMENT THIS CONCEPT OF EVENT MODULES :-
 
-// Simulate a file downloading system using EventEmitter where different parts of the system react to events like 
-// start, progress, error, and complete.
+// 1. Easy Challenge 
 
-const eventEmitter1 = require('events');
+// Create an event called "greet" that logs "Hello, Developer!" when triggered.
 
-class DownloadManager extends eventEmitter1{
-      startDownload(){
-         event
-      }
+const EventEmitter1 = require('events');
+
+const event1 = new EventEmitter1();
+
+event1.on("greet",function(){
+   console.log("Hello, Developer!");
+});
+
+event1.emit("greet")
+
+// 2. Easy Challenge
+
+// Emit an event "order" with order details (item and price) and log a formatted message.
+
+event1.on("order",(item,price)=>{
+   console.log(`Order placed for => item: ${item} and price: INR ${price}`)
+});
+
+event1.emit("order","Mobile",20000)
+
+// 3. Easy Challenge
+
+// Create a "startup" event that logs "Server started" only once, even if emitted multiple times.
+
+event1.once("startup",()=>{
+   setTimeout(()=>{
+      console.log("Server has Started");
+   },3000)
+})
+
+event1.emit("startup")
+
+// 4. Moderate Challenge
+
+// Extend EventEmitter into a class called Notifier. Add a method sendNotification(msg) that emits a "notify" event with the message.
+
+// class based eventEmitter banana sikhte hai ab
+
+// normally what we do is :- 
+
+// const eventEmitter3 = require('events')
+// const event3 = new eventEmitter3();
+
+// event3.on("hello",()=>{
+//    console.log("event3 executed !")
+// })
+
+// event3.emit("hello");
+
+
+
+const EventEmitter2 = require('events');
+
+class Notifier extends EventEmitter2{
+   constructor(username){
+      super();
+      this.username=username;
+   }
+   sendNotification(msg){
+      this.emit("Notify",`${this.username},${msg}`)
+   }
 }
 
+const user11 = new Notifier("Vivek"); 
+const user22 = new Notifier("Ram")
 
+user11.on("Notify",(msg)=>{
+   console.log("user11 recieved => ",msg)
+});
 
+user22.on("Notify",(msg)=>{
+   console.log("user22 recieved => ",user22)
+});
 
+user11.sendNotification("You Have a New Message !")
