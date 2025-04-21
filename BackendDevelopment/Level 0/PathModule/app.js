@@ -105,3 +105,27 @@ const dirname = path.dirname("BackendDevelopment/Level 0/PathModule/folder/subfo
 
 console.log(dirname)
 
+// 6. path.parse(filepath)
+
+// Breaks the path into root, dir, base, ext, name
+
+//  Use case: When you need individual parts (e.g., log file name without extension)
+
+const parsedPath = path.parse("BackendDevelopment/Level 0/PathModule/folder/subfolder/data.txt");
+
+console.log(parsedPath)
+
+// 7. path.normalize(path)
+
+// Cleans up messy paths with extra slashes or dots
+
+// Use case: If path input comes from user or dynamically constructed
+
+const messyPath = path.normalize("folder//subfolder/../file.txt")
+console.log(messyPath)
+
+// 8. __dirname
+
+console.log(__dirname)
+
+// Gives absolute path of current file’s folder
