@@ -13,20 +13,35 @@ const fs = require('fs/promises')
 
 const path = require('path')
 
-// const eventEmitter = require('events')
+const eventEmitter = require('events')
 
-const [,filepath,fileName,command,title,text]=process.argv
+const event = new eventEmitter()
 
-// console.log(filepath,fileName)
-// console.log(filepath,command,text)
+event.on("read",()=>{
+    const date = new Date();
+    console.log("File Being Read Now at :- ", date.toLocaleString())
+})
 
-const fileDir = path.dirname(filepath);
+event.on("add",()=>{
+    const date = new Date();
+    console.log(`New Note Created with Title:${title} at ${date.toLocaleString()}`)
+})
 
-console.log(fileDir)
+
+const [, , command, title, text]=process.argv
+
+const notesDir = path.join(__dirname,"notes");
+
+const filePath = path.join(notesDir,`${title}.txt`);
+
+async function ensureDir(){
+   await fs.mkdir(notesDir,{recursive:true});
+}
 
 async function NoteMaker(){
     try{
-      await fs.writeFile(fileName,text,"utf-8")
+      await ensureDir();
+      await fs.writeFile(filePath,text,"utf-8")
       console.log("File Created with :- Title : ",title)
     }
     catch(err){
@@ -36,7 +51,7 @@ async function NoteMaker(){
 
 async function NoteReader(){
     try{
-       const data = await fs.readFile(fileName,"utf-8");
+       const data = await fs.readFile(filePath,"utf-8");
        console.log("Data Read is :- ",data);
     }
     catch(err){
@@ -46,9 +61,11 @@ async function NoteReader(){
 
 async function NotesLister(){
     try{
-     const list= await fs.readdir(filepath,"utf-8");
-     for(const note of list)
-        console.log(note);
+     const list= await fs.readdir(notesDir,"utf-8");
+     console.log("Your Notes :- ")
+     list.forEach((file,index)=>{
+        console.log(`${index + 1} => ${file}`)
+     })
     }
     catch(err){
         console.log(err)
@@ -57,24 +74,31 @@ async function NotesLister(){
 
 async function NotesRemover(){
     try{
-        await fs.unlink(fileName);
-        console.log("File Successfully Deleted ! , Filename:-",fileName);
+        await fs.unlink(filePath);
+        console.log("File Successfully Deleted ! , Filename:-",title);
     }
     catch(err){
         console.log(err);
     }
 }
-
-switch(command){
-    case "add": NoteMaker();
-    break;
-
-    case "read": NoteReader();
-    break;
-
-    case "list": NotesLister();
-    break;
-
-    case "delete": NotesRemover();
-    break;
-}
+(async function main(){
+    switch(command){
+        case "add": await NoteMaker();
+        event.emit(command);
+        break;
+    
+        case "read": await NoteReader();
+        event.emit(command);
+        break;
+    
+        case "list":NotesLister();
+        break;
+    
+        case "delete": NotesRemover();
+        break;
+    
+        default: console.log(`unknown command given :-  
+            you can run the following commands:-
+            add,read,delete,list`)
+    }
+})();
