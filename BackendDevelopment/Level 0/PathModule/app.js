@@ -39,3 +39,27 @@
 
 // Now that we know that it is important to use path module in production level code for above mentioned reasons, we will see
 // important path module methods:-
+
+const path = require('path');
+
+const fs = require('fs/promises')
+// 1. path.join()
+
+// Safely joins folder paths — handles / or \ automatically
+
+const filePath = path.join("folder","subfolder","data.txt");
+
+(async function FileMaker(){
+   try{
+    await fs.writeFile(filePath,"Wrote this file")
+    console.log(`file created at ${filePath}`)
+   }
+   catch(err){
+    console.log(err)
+   }
+})();
+
+// toh agar upar ke example ko dekhe, path.join() se we can simply create a file path, and then we can store it in a variable and
+// we can use it to pass it as an argument in other methods where we might need a file path, for example:- writeFile(), it will
+// write the file in that path, now why is it good, it makes the code cleaner and easier to resolve in future.
+
