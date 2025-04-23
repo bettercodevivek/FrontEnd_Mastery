@@ -79,3 +79,62 @@ server.listen(3000,()=>{
 
 // Executes the callback when the server is ready to accept requests (not when a request is received).
 
+// We will now learn about HTTP Methods . So, basically there are 4 major http methods used:-
+
+// 1. GET - Used to fetch data
+// 2. POST - Used to create new data
+// 3. PUT - used for updating existing data
+// 4. DELETE - used to remove data 
+
+// Basically, simple language mein bole toh => client side ko jab interact karna hota hai server se, toh HTTP Methods use hote hai,
+// to tell server ki client ko kya chaiye. For example:-
+// 1. GET - client ko existing data chaiye server se
+// 2. POST - client ko new data server mein add karvana hai
+// 3. PUT - client kisi data ko puri tarah replace karna chahta ho
+// 4. PATCH - client kisi data ka sirf koi particular portion update karna chahta hai
+// 5. DELETE - client kisi data ko delete karna chahta hai
+
+// 1. GET
+
+if(req.method === 'GET' && req.url === '/products'){
+    // fetch xyz data
+}
+
+// characteristics :- 
+
+// 1. No body in request
+// 2. idempotent ( Yaani yeh request chahe 1 baar karo ya 10 baar, result will be same every single time )
+
+// 2. POST
+
+if(req.method === 'POST' && req.url === '/createUser'){
+    let body = '';
+    req.on('data', chunk => body += chunk);
+    req.on('end', () => {
+      const parsed = JSON.parse(body);
+      // Save to DB or file
+    });
+}
+
+// characteristics :-
+
+// 1. has body (usually JSON)
+
+// 2. used for form submissions, user registrations
+
+// 3. not idempotent(posting same data twice = multiple records)
+
+// 3. PUT
+
+// characteristics
+
+// 1. idempotent
+// 2. full replacement of resource
+
+// 4. PATCH
+
+// characteristics
+
+// 1. only modifies specific fields
+
+// 2. More efficient for partial updates
