@@ -23,8 +23,27 @@ const {parse} = require('url');
 // Now , sabse pehle we will implement an async function that gets all the notes and and shows in form of JSON as response.
 
 async function getAllNotes(){
-    const data = await fs.readFile("notes.json","utf-8");
-    return JSON.parse(data || "[]");
+    try {
+      const data = await fs.readFile('notes.json','utf-8');
+      return JSON.parse(data || "[]");
+    }
+    catch(err){
+        console.log("An error occured",err)
+    }
+}
+
+// helper function to save notes
+
+async function SaveNewNote(Note){
+    const notes = await getAllNotes();
+    notes.push(Note);
+    await fs.writeFile("notes.json",JSON.stringify(notes,null,2),'utf-8');
+}
+
+// helper function to rewrite file as to delete desired note from notes.json
+
+async function SaveAllNotes(notes){
+        await fs.writeFile("notes.json",JSON.stringify(notes,null,2),"utf-8");
 }
 
 const server = http.createServer(async(req , res)=>{
@@ -57,6 +76,38 @@ const server = http.createServer(async(req , res)=>{
             res.writeHead(404,{'content-type':'text/plain'})
             res.end('Note Not Found !')
         }
+     }
+     else if(path === "/notes" && method === "POST"){
+         let body = " ";
+         req.on("data",(chunk)=>{
+            body+=chunk.toString();
+         })
+         req.on("end",async()=>{
+            try{
+              const note =JSON.parse(body)
+              await SaveNewNote(note);
+              res.writeHead(200,{'content-type':'application/json'})
+              res.end(JSON.stringify({message:"Saved a note successfully",note}))
+            }
+            catch(err){
+                res.writeHead(404,{'content-type':"application/json"})
+                res.end(JSON.stringify({error:"Error occurred in creating a new note"}))
+            }
+         });
+     }
+     else if(path.startsWith('/notes/') && method === 'DELETE'){
+       const id = path.split('/')[2];
+       const AllNotes = await getAllNotes();
+       const filteredNotes = AllNotes.filter(note => note.id !== Number(id));
+       if(filteredNotes.length === AllNotes.length){
+          res.writeHead(404,{'content-type':'application/json'});
+          res.end(JSON.stringify({error:"Note Not Found,Hence json file unchanged"}))
+       }
+       else{
+          await SaveAllNotes(filteredNotes);
+           res.writeHead(200,{'content-type':'application/json'})
+           res.end(JSON.stringify({message:"Note Successfully Deleted !"}))
+       }
      }
 })
 
@@ -116,3 +167,16 @@ server.listen(3000,()=>{
 // (end,callback) is used when recieved all data chunks and then parse and save full body.
 
 
+// toh yaar ab yaha pe kuch cheezein samajhte hai
+// sabse pehle to ek simple sa doubt yeh ho raha hai ki hum async function jo likh rahe hai ( helper function ) like getAllNotes()
+// toh ofc function ke andar to await karenge hi, because iss await ka purpose simple hai it will wait for async operation to complete
+// and then store the result, but when we call this function again in our required if-block , then jab await laga rahe hai, uska purpose
+// hai ki woh hume actual answer dede, agar woh na lagaye toh async ek promise object return karega.
+
+// Kyunki getAllNotes() khud ek Promise return karta hai.
+
+// Aur agar tu usko await nahi karega, toh notes variable mein pura Promise object aajayega, actual data nahi.
+
+// Tujhe actual mein file ka content chahiye na (i.e., notes array)?
+
+// Isiliye firse await lagana padta hai jab tu usko call karega.
