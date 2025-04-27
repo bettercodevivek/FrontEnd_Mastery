@@ -109,6 +109,21 @@ const server = http.createServer(async(req , res)=>{
            res.end(JSON.stringify({message:"Note Successfully Deleted !"}))
        }
      }
+     else if(path.startsWith('/notes/') && method === "PATCH"){
+        let body = " "
+        const id = path.split('/')[2];
+        request.on("data",(chunk)=>{
+          body+=chunk.toString();
+        })
+        request.on("end",async()=>{
+            try{
+                
+            }
+            catch{
+
+            }
+        })
+     }
 })
 
 
