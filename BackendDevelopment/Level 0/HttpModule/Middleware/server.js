@@ -42,24 +42,93 @@ const http = require('http');
 
 // middleware function for logging
 
-function logger(req,res,next){
-    console.log(`request recieved at:${new Date().toLocaleString()}, on path : ${req.url} with method : ${req.method}`);
-    next();
+// function logger(req,res,next){
+//     console.log(`request recieved at:${new Date().toLocaleString()}, on path : ${req.url} with method : ${req.method}`);
+//     next();
+// }
+
+// const server = http.createServer((req,res)=>{
+//          logger(req,res,()=>{
+//               if(req.url === "/" && req.method === 'GET'){
+//                      res.writeHead(200,{'content-type':'application/json'})
+//                      res.end(JSON.stringify({message:"Welcome to Homepage of testing middleware !"}))
+//               }
+//               else{
+//                 res.writeHead(404,{'content-type':'application/json'})
+//                 res.end(JSON.stringify({error:"Couldnt fetch homepage !"}))
+//               }
+//          })
+// })
+
+// server.listen(8000,()=>{
+//     console.log("server started at port:8000")
+// })
+
+
+// toh middleware ke concept mein ek important cheez samajhni zaroori hai, ki middleware flow mein kaha aata hai :- 
+
+// toh generally and by default :- middleware hum request object pe hi lagate hai meaning ki, koi request aayi, uspe aapne kuch
+// middleware lagaye like logging, authorization and then finally it goes to server and a response is generated.
+
+// toh yaani middleware response ke saath kuch interference nahi karta, it only and only works and interferes with the request incoming
+// from the client.
+
+// Request mein middleware kuch bhi modify ya check kar sakta hai (headers badalna, auth check, etc.)
+
+// Response ke baad woh kuch nahi karega, jab tak specially aisa kuch na likha ho (e.g., setting some response headers just before sending).
+
+// MIDDLEWARE CHAINING
+
+// Chaining ka simple matlab hota hai:
+
+//     Ek se zyada middleware ko line-by-line sequence mein run karna.
+
+//     Har middleware ka next() function hota hai,
+//     jo next middleware ko call karta hai.
+
+//     If you don't call next(), request wahi atak jaayegi.
+
+
+// aasan language mein ek ke baad ek middlewares lagana ki ek chain si create hojaye, just like promise chaining.
+
+// example :- 
+
+// middleware 1
+
+function logger1(req,res,next){
+  console.log(`loggin request at ${req.url} and ${req.method}`);
+  next();
 }
 
-const server = http.createServer((req,res)=>{
-         logger(req,res,()=>{
-              if(req.url === "/" && req.method === 'GET'){
-                     res.writeHead(200,{'content-type':'application/json'})
-                     res.end(JSON.stringify({message:"Welcome to Homepage of testing middleware !"}))
-              }
-              else{
-                res.writeHead(404,{'content-type':'application/json'})
-                res.end(JSON.stringify({error:"Couldnt fetch homepage !"}))
-              }
-         })
+// middleware2
+
+function authorize(req,res,next){
+  console.log("authorization under process !");
+  next();
+}
+
+// middleware3
+
+function handleRequest(req,res,next){
+  console.log("Handle Request Executed !")
+  if(req.url === '/' && req.method === "GET"){
+    res.writeHead(200,{'content-type':'application/json'})
+    res.end(JSON.stringify({message:"Homepage of middleware testing server !"}))
+  }
+  else{
+    res.writeHead(404,{'content-type':'application/json'})
+    res.end(JSON.stringify({error:"Error occurred at homepage !"}))
+  }
+}
+
+const server=http.createServer((req,res)=>{
+  authorize(req,res,()=>{
+    logger1(req,res,()=>{
+      handleRequest(req,res);
+    })
+  })
 })
 
-server.listen(8000,()=>{
-    console.log("server started at port:8000")
+server.listen(8080,()=>{
+  console.log('Server Started at port:8080')
 })
