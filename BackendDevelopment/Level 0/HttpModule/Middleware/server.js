@@ -121,14 +121,59 @@ function handleRequest(req,res,next){
   }
 }
 
-const server=http.createServer((req,res)=>{
-  authorize(req,res,()=>{
-    logger1(req,res,()=>{
-      handleRequest(req,res);
-    })
+// const server=http.createServer((req,res)=>{
+//   authorize(req,res,()=>{
+//     logger1(req,res,()=>{
+//       handleRequest(req,res);
+//     })
+//   })
+// })
+
+// server.listen(8080,()=>{
+//   console.log('Server Started at port:8080')
+// })
+
+// middlware chaining challenge
+
+// middleware 1
+
+function logger2(req,res,next){
+  console.log(`request made at path:${req.url} and using method:${req.method} at time : ${new Date().toLocaleString()}`);
+  next();
+}
+
+// middleware 2
+
+function Timer(req,res,next){
+  const start = Date.now();
+  res.on('finish',()=>{
+    const end = Date.now();
+    console.log(`Time Taken to Process Request : ${end-start}ms`)
   })
+  next();
+}
+
+// middleware 3
+
+function finalHandler(req,res,next){
+  if(req.url === "/" && req.method === "GET"){
+    res.writeHead(200,{'content-type':'application/json'});
+    res.end(JSON.stringify({message:"Challenge for middlewares homepage !"}))
+  }
+  else{
+    res.writeHead(404,{'content-type':'application/json'})
+    res.end(JSON.stringify({error:"error aagya bro !"}))
+  }
+}
+
+const server = http.createServer((req,res)=>{
+  logger2(req,res,()=>{
+    Timer(req,res,()=>{
+      finalHandler(req,res);
+    });
+  });
 })
 
 server.listen(8080,()=>{
-  console.log('Server Started at port:8080')
+  console.log("Server started at port : 8080")
 })
