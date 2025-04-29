@@ -166,14 +166,85 @@ function finalHandler(req,res,next){
   }
 }
 
+// const server = http.createServer((req,res)=>{
+//   logger2(req,res,()=>{
+//     Timer(req,res,()=>{
+//       finalHandler(req,res);
+//     });
+//   });
+// })
+
+// server.listen(8080,()=>{
+//   console.log("Server started at port : 8080")
+// })
+
+
+//  A VERY IMPORTANT TOPIC TO UNDERSTAND AND STUDY, VERY VERY IMPORTANT :-
+
+// ab dekho we learnt ki normally http module use karke jab middlewares use karte hai, toh multiple middlewares ke case mein
+// chaining karni padti hai, and humne kya kara middleware functions likhe and fir manually chaining karni padi inside the createServer()
+// function , callback hell jaisa lagta hai jo because of nested callbacks.
+
+// ab express js jo hota hai, woh differently work karta hai, woh aise chaining nahi karta, uske under the hood middleware chaining ki 
+// functionality different hoti hai and bhaut efficient bhi. let us see how it happens under the hood in express js :-
+
+// 1. An array to store all middleware functions
+
+const middlewares = [];
+
+// 2. A custom 'use' function, that will take a middleware function as an argument and just push it in the above array
+
+function use(mw){
+  middlewares.push(mw);
+}
+
+// 3. A function to run middlewares one by one, basically by looping on the middlewares array 
+
+function runMiddleware(req,res){
+  let index  = 0;
+  function next(){
+    const middleware = middlewares[index];
+    index++;
+    if(middleware){
+      middleware(req,res,next);
+    }
+  }
+  next();
+}
+
+// 4. Now, create middlewares to register in use() function
+
+// middleware 1
+
+function logger(req,res,next){
+  console.log(`Request made by client at URL:${req.url} and by method: ${req.method}`);
+  next();
+}
+
+// middleware 2
+
+function authorize(req,res,next){
+  console.log("Authorization under process !");
+  next();
+}
+
+// middleware 3
+
+function ResponseHandler(req,res,next){
+  if(req.url === '/' && req.method === 'GET'){
+    res.writeHead(200,{'content-type':'application/json'});
+    res.end(JSON.stringify({message:"Learning Express style middleware chaining"}));
+  }
+}
+
+use(logger);
+use(authorize);
+use(ResponseHandler)
+
 const server = http.createServer((req,res)=>{
-  logger2(req,res,()=>{
-    Timer(req,res,()=>{
-      finalHandler(req,res);
-    });
-  });
+  runMiddleware(req,res);
 })
 
 server.listen(8080,()=>{
-  console.log("Server started at port : 8080")
+  console.log('Server started at port : 8080');
 })
