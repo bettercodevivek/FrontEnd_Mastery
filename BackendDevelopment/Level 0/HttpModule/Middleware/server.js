@@ -237,14 +237,34 @@ function ResponseHandler(req,res,next){
   }
 }
 
-use(logger);
-use(authorize);
-use(ResponseHandler)
+// use(logger);
+// use(authorize);
+// use(ResponseHandler)
 
-const server = http.createServer((req,res)=>{
-  runMiddleware(req,res);
+// const server = http.createServer((req,res)=>{
+//   runMiddleware(req,res);
+// })
+
+// server.listen(8080,()=>{
+//   console.log('Server started at port : 8080');
+// })
+
+
+// Now we will import and use our customRouter class to mimick functioning of express server
+
+const Router = require('./router')
+
+const router = new Router();
+
+router.get('/home',(req,res)=>{
+  res.writeHead(200,{'content-type':'application/json'});
+  res.end(JSON.stringify({message:"Hello from custom router home !"}))
 })
 
+const server = http.createServer((req,res)=>{
+  router.handle(req,res);
+});
+
 server.listen(8080,()=>{
-  console.log('Server started at port : 8080');
+  console.log("Server started at port : 8080");
 })
