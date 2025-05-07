@@ -79,14 +79,72 @@ app.get('/users/',(req,res)=>{
 
 // toh ek example code lelete hai POST request ka to understand req.body
 
-app.post('/notes',(req,res)=>{
-    console.log(req.body);
+// app.post('/notes',(req,res)=>{
+//     console.log(req.body);
 
-    const {title,content} = req.body;
+//     const {title,content} = req.body;
 
-    if(!title || !content){
-       return res.status(400).json({error:"Title and Content should Exist !"})
+//     if(!title || !content){
+//        return res.status(400).json({error:"Title and Content should Exist !"})
+//     }
+
+//     res.status(201).json({message:"Note created successfully!",note:{title,content}});
+// });
+
+
+app.post('/usersList',(req,res)=>{
+    console.log("Request Body Recieved in POST Request => ",req.body);
+    const {UserId,UserName} = req.body;
+    if(!UserId || !UserName){
+        return res.status(400).json({error:"Invalid Body , must contain id and name"});
     }
+    res.status(201).json({message:"New User Registered Successfully",User:{UserId,UserName}});
+})
 
-    res.status(201).json({message:"Note created successfully!",note:{title,content}});
-});
+// Now,we will implement all CRUD operations using a memory array to understand their working
+
+const notesArr = [];
+
+app.post('/notes',(req,res)=>{
+    console.log(`Request Recieved at URL:${req.url} and METHOD:${req.method} with Request Body as :${req.body}`);
+    const {Title,Content} = req.body;
+    const newNote = {
+        id:notesArr.length+1,
+        Title,
+        Content
+    };
+    notesArr.push(newNote);
+    res.status(201).json({message:"New Note Created succesfully !", Note:{Title,Content}});
+})
+
+app.get('/notes',(req,res)=>{
+    console.log(`Request Recieved at URL:${req.url} and METHOD: ${req.method}`);
+    res.status(200).json({message:"Here are all the notes present in the notes array",notesArr});
+})
+
+app.get('/notes/:id',(req,res)=>{
+    console.log(`Request Recieved at url:${req.url} and method:${req.method}`);
+    const id = parseInt(req.params.id)
+    const note = notesArr.find(n => n.id === id);
+    if(note){
+        res.status(200).json(note);
+    }
+    else{
+        res.status(404).json({error:"Note not found !"})
+    }
+})
+
+// Update a note completely
+
+app.put('/notes/:id',(req,res)=>{
+    const id = parseInt(req.params.id);
+    const {Title, Content} = req.body;
+    const noteIdx = notesArr.findIndex(n => n.id === id);
+    if(noteIdx === -1){
+        res.status(404).json({error:"Note not found for updation !"})
+    }
+    
+    notesArr[noteIdx] = {id,Title,Content};
+
+    res.status(200).send({message:"Note successfully updated !",note:notesArr[noteIdx]});
+})
