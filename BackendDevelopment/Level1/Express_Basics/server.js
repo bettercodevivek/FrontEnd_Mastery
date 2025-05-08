@@ -146,5 +146,36 @@ app.put('/notes/:id',(req,res)=>{
     
     notesArr[noteIdx] = {id,Title,Content};
 
-    res.status(200).send({message:"Note successfully updated !",note:notesArr[noteIdx]});
+    res.status(200).json({message:"Note successfully updated !",note:notesArr[noteIdx]});
 })
+
+// delete a note completely
+
+app.delete('/notes/:id',(req,res)=>{
+    const id = parseInt(req.params.id);
+
+    const noteIdx = notesArr.findIndex(n => n.id === id);
+    if(noteIdx === -1){
+        res.status(404).json({error:"The note doesnt exist !"});
+    }
+    else{
+        notesArr.splice(noteIdx,1);
+        res.status(200).json({message:"Note successfully deleted !"})
+    }
+});
+
+// now, explanation to some of the code above :- 
+
+// Why findIndex in PUT & DELETE?
+
+// Because we need index to replace or delete an item in array.
+
+// find() returns object, findIndex() returns position.
+
+//  Why notes[noteIdx] = { id, title, content } in PUT?
+
+//  Because PUT completely replaces the existing note → must overwrite whole object.
+
+// Why splice in DELETE?
+
+// To remove the note from array (mutates original array).
