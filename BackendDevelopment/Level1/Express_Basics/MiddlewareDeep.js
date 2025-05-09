@@ -135,3 +135,99 @@ app.get('/about',myLogger,myLogger2,(req,res)=>{
 // app.use(morgan('dev'));
 
 // bas yeh jo upar likha hai, yeh saari requests likhne se pehle likhdena tabhi it will work.
+
+// ERROR HANDLING MIDDLEWARES
+
+// ek normal middleware function 3 args leta hai => (req,res,next)
+// whereas ek error handling middleware function 4 args leta hai => (err,req,res,next) 
+// isme err argument is for error , Express automatically isko call karta hai jab koi error hota hai ya tum next(error) likhte ho.
+
+// ab important cheez yeh hai ki, yeh order of middlewares mein sabse end mein lagaya jaata hai, infact after all routes 
+// because agar routes se pehle likh diya isse, toh normal requests pe bhi error handler lagega
+
+// example code :-
+
+// const express = require('express');
+// const app = express();
+
+// app.get('/', (req, res) => {
+//     res.send('Hello!');
+// });
+
+// app.get('/error', (req, res, next) => {
+//     const err = new Error('Something went wrong!');
+//     err.statusCode = 400;
+//     next(err);
+// });
+
+// app.use((err, req, res, next) => {
+//     console.error(err.stack);
+//     res.status(err.statusCode || 500).json({
+//         error: err.message
+//     });
+// });
+
+// app.listen(3000, () => {
+//     console.log('Server running on port 3000');
+// });
+
+// yaha pe ab sabse bada doubt yehi aayega ki, hum error middleware tak pohochenge kaise, like what events will lead to execution of
+// error handling middleware
+
+// toh pehle toh yeh samjho ki, we will not use next(err) in any normal middleware, means => if our middleware is something simple like
+// a logger middleware, toh usme koi check ya authentication nahi hai, which means, its pretty simple and it wont throw any error
+
+// whereas if we write a middleware jiska purpose hai to authenticate, it simply means, it can have 2 possible outcomes => either the
+// authentication will be success or not, in the case if its success, we will simply move to next middleware with next(), but if it fails
+// we will run next(err)
+
+// ab next(err) karta yeh hai ki, it will immediately skip all the next middleware and handlers and go straight to tha last error handling
+// middleware that we have written, and woh chal jaayega.
+
+// toh use case samjho, error handling middleware call hi woh middleware ya handler karega jaha koi check lag raha ho.
+
+// 1. Normal Middleware
+
+// app.use((req, res, next) => {
+//     console.log("This is just a logger middleware.");
+//     next(); // no error → normal flow
+// });
+
+
+// 2. Check karne wala
+
+// app.use((req, res, next) => {
+//     if (!req.headers.authorization) {
+//         const err = new Error("Unauthorized: No token provided!");
+//         err.statusCode = 401;
+//         return next(err);  // → ONLY if error happens, jump to error middleware
+//     }
+//     next(); // → else continue normally
+// });
+
+
+// 3. Ek aur tarika (async task)
+
+// Agar middleware ke andar asynchronous kaam hai (e.g. DB query, file read) → aur waha koi exception/failure aaya → tab bhi hum next(err) likhte hain.
+
+// app.use(async (req, res, next) => {
+//     try {
+//         const user = await getUserById(req.query.id);
+//         if (!user) {
+//             const err = new Error("User not found!");
+//             err.statusCode = 404;
+//             return next(err);
+//         }
+//         req.user = user;  // attach user to req
+//         next();
+//     } catch (err) {
+//         next(err); // any unexpected error → pass to error middleware
+//     }
+// });
+
+
+// toh bhai → isliye har middleware ko “error throwing middleware” nahi banana chahiye!
+
+// Bas jis middleware me failure hone ke chances hain → wahi pe conditional ya try-catch ke andar next(err) use karna hota hai.
+
+//  baaki ke middleware me direct next() likhte hain.
