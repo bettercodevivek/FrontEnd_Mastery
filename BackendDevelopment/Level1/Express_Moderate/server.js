@@ -1,24 +1,24 @@
-const express = require('express');
+// const express = require('express');
 
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 
-const app = express();
+// const app = express();
 
-const PORT = 8080;
+// const PORT = 8080;
 
-app.use(express.json());
+// app.use(express.json());
 
-mongoose.connect("mongodb://localhost:27017/")
-.then(()=>{
-    console.log("MongoDB Connected Successfully !");
-})
-.catch((err)=>{
-   console.error(err);
-})
+// mongoose.connect("mongodb://localhost:27017/")
+// .then(()=>{
+//     console.log("MongoDB Connected Successfully !");
+// })
+// .catch((err)=>{
+//    console.error(err);
+// })
 
-app.listen(PORT,()=>{
-    console.log("Server started boss !")
-})
+// app.listen(PORT,()=>{
+//     console.log("Server started boss !")
+// })
 
 // Theek hai yaar toh ab na thoda samajhte hai ki yeh sab chal kya raha hai aakhir
 
@@ -78,3 +78,72 @@ app.listen(PORT,()=>{
 // basically dekh, abhi DB se pehle we were either using memory array or a json file to perform mock CRUD operations, waha hum
 // helper functions use kar rahe the jo file ops perform kar rahe the using fs module, but ab kyuki actual DB hai humare paas, we
 // dont need to use fs module, and thus model humare saare CRUD operations perform karne mein use hota hai
+
+
+// Now, we will write the complete code to perform CRUD operations on notes collection using model
+
+const express = require('express');
+
+const mongoose = require('mongoose');
+
+const app = express();
+
+const PORT = 8080;
+
+const Note = require('./models/Note');
+
+app.use(express.json())  // application level(for every route) json parsing middleware lagadiya , built-in hai yeh.
+
+// connecting the DB
+
+mongoose.connect("mongodb://localhost:27017/")
+.then(()=>{
+  console.log(`DB Connection successfully established !`)
+})
+.catch((err)=>{
+  console.error(`An error occurred while connecting DB : ${err}`)
+});
+
+// POST Request 
+
+app.post('/notes',async(req,res)=>{
+    
+  try{
+     const { title , content} = req.body ;
+
+    if(!title || !content){
+      return res.status(404).json({message:"both title and content must be present !"})
+    }
+    
+    const newNote = new Note({title,content})
+    const SavedNote = await newNote.save();
+
+    res.status(201).json(
+      {
+        message:"New note Created !",
+        Note:SavedNote,
+      }
+    )
+  }
+  catch(err){
+    console.error("An error occurred while creating note !",err.message);
+    res.status(500).json({error:"Error creating Note !"})
+  }
+});
+
+
+// GET Request
+
+app.get('/notes',async(req,res)=>{
+  try{
+  const notes = await Note.find();
+    res.status(200).json(notes);
+  }
+  catch(err){
+    res.status(404).json({error:err});
+  }
+});
+
+app.listen(PORT,()=>{
+  console.log(`SERVER STARTED AT PORT : ${PORT}`)
+});
