@@ -6,8 +6,6 @@ const app = express();
 
 const PORT = 8080;
 
-const Note = require('./models/Note');
-
 app.use(express.json());
 
 mongoose.connect("mongodb://localhost:27017/")
@@ -17,28 +15,6 @@ mongoose.connect("mongodb://localhost:27017/")
 .catch((err)=>{
    console.error(err);
 })
-
-// 🧠 POST a new note
-app.post('/notes', async (req, res) => {
-  try {
-    const { title, content } = req.body;
-    const newNote = new Note({ title, content });
-    await newNote.save();
-    res.status(201).json({ message: 'Note created', note: newNote });
-  } catch (err) {
-    res.status(500).json({ error: 'Something went wrong', details: err.message });
-  }
-});
-
-// 🚀 GET all notes
-app.get('/notes', async (req, res) => {
-  try {
-    const notes = await Note.find();
-    res.status(200).json({ notes });
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch notes', details: err.message });
-  }
-});
 
 app.listen(PORT,()=>{
     console.log("Server started boss !")
