@@ -144,6 +144,70 @@ app.get('/notes',async(req,res)=>{
   }
 });
 
+
+// GET request per id
+
+app.get('/notes/:id',async(req,res)=>{
+  try{
+    const id = req.params.id;
+  const note = await Note.findById(id);
+  if(!note){
+    return res.status(404).json({error:"Note doesnt exist !"})
+  }
+  res.status(200).json({
+    message:"Note found",
+    note:note
+  });
+  }
+  catch(err){
+    res.status(500).json({error:"An error occurred"});
+  }
+})
+
+// PUT Request
+
+app.put('/notes/:id',async(req,res)=>{
+  try{
+    const id = req.params.id;
+  const {title,content} = req.body;
+  const UpdatedNote = await Note.findByIdAndUpdate(id,
+    {title,content},
+    {new:true,runValidators:true}
+  );
+  if(!UpdatedNote){
+    res.status(404).json({error:"Note not found !"})
+  }
+
+  res.status(200).json({message:"Note Updated Successfully!",note:UpdatedNote});
+  }
+  catch(err){
+    res.status(500).json({error:"An error occurred while updating this resource !"})
+  }
+});
+
+// findByIdAndUpdate()  === 	Finds note by ID and updates it
+// { new: true } ===	Returns the updated note instead of the old one
+// { runValidators: true } ===	Ensures Mongoose schema validation runs during update
+
+
+// DELETE Request
+
+app.delete('/notes/:id',async(req,res)=>{
+  try{
+    const id = req.params.id;
+    const DeletedNote = await Note.findByIdAndDelete(id);
+
+    if(!DeletedNote){
+      return res.status(404).json({error:"Note doesnt exist !"});
+    }
+
+    res.status(200).json({message:"Note Deleted Successfully !", note:DeletedNote})
+  }
+  catch(err){
+      res.status(500).json({error:"Error occurred in deleting the requested resource !"})
+  }
+})
+
 app.listen(PORT,()=>{
   console.log(`SERVER STARTED AT PORT : ${PORT}`)
 });
