@@ -101,3 +101,38 @@ app.post('/login', async (req, res) => {
 app.listen(PORT,()=>{
     console.log(`Server started at PORT : ${PORT}`)
 });
+
+
+// Now, we will learn about JWTs and how to implement them.
+
+// but before implementation it is important to understand what they are and why are they even needed in the first place :- 
+
+// JWT stands for JSON Web Tokens, ab bilkul layman lang mein samajh.
+
+// Jab user login karleta hai normally kisi website pe, toh fir agar usse dusre kisi protected route ko access karna ho like dashboard
+// toh baar baar server ko authenticate karna padega and wohi authentication wala process chalega , which can be long, not optimal for server
+// as well as client, baar baar yeh check karna ki banda yeh logged in hai ya nahi by running credentials through DB is very non-optimal
+
+// Agar JWT na ho toh:
+//     Har baar jab user kisi secure route pe jaata hai (like /profile, /orders, /dashboard), server ko check karna padega:
+//     "Yeh banda kaun hai?"
+//     "Kya yeh login hai ya nahi?"
+//     Iske liye phir session banana padta, cookies maintain karni padti — server pe load badhta.
+
+// isliye iss problem ko resolve karne ke liye banaya gaya JWT ka concept, now JWT is like a digital pass.
+
+// JWT ek portable proof of login hai — ek baar user login kare, toh:
+
+//     Usko JWT milta hai (like an Admit Card)
+
+//     JWT ke andar uski ID, email, aur kuch aur info hoti hai
+
+//     Jab bhi wo kisi protected route pe jaye, wo JWT dikhata hai
+
+//     Server JWT verify karta hai → agar valid hai toh access granted
+
+// JWT ≠ Login
+// JWT = Proof ki user login ho chuka hai
+// → Toh user ko baar-baar login karne ki zarurat nahi
+// → Server ko state maintain karne ki zarurat nahi
+
