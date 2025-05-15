@@ -219,3 +219,72 @@ app.listen(PORT,()=>{
 // browser, waha still we are getting an error, because, postman mein hum manually headers mein authorization mein bearer <token> set kar
 // rahe hai, whereas browser mein aisa automatically hota nahi hai , and manually karne ke liye frontend side , jab fetch karenge
 // route ko, tab header mein store karna padega token,aise localstorage mein hojayega store.
+
+
+// some important points and doubts regarding JWTs :
+
+// 1. "First Login ke baad token generate hota hai" — Yes, Correct.
+
+// Jab user login karta hai:
+
+//     jwt.sign() se ek new token create hota hai
+
+//     Usme user's info (like id, email) hoti hai
+
+//     Aur ek expiry time bhi hota hai (jaise expiresIn: '1h')
+
+// 2. "Agar user phir se login kare toh?"
+
+//  Yes! Har login pe naya token generate hota hai.
+
+// Token dynamically banta hai har login ke time pe. Pehle wala expire ho gaya ho ya valid ho, usse farak nahi padta.
+// Backend har login pe naya token de deta hai.
+
+// 3. "Token expire hone ke baad kya hota hai?"
+
+//  JWT is stateless — iska matlab hai:
+
+// Token DB mein store nahi hota
+
+// JWT self-contained hota hai → usme hi expiry time encoded hota hai
+
+// Jab token expire ho jata hai, uske baad koi bhi protected route agar access kiya jaaye:
+
+// jwt.verify() fail karega
+
+// Aur hum response de denge: 401 Unauthorized: Token expired
+
+// Koi backend/DB cleanup nahi hota — because server toh token ko kahin store karta hi nahi.
+
+
+// question => "Agar server token store nahi karta (stateless hai), toh fir middleware har baar token verify kaise karta hai?"
+
+// answer => JWT token khud ke andar hi saari info carry karta hai — server ko bas verify karna hota hai ki:
+
+//     Token change toh nahi hua?
+
+//     Token expire toh nahi ho gaya?
+
+//     Token ka signature valid hai ya nahi?
+
+// Yeh sab kuch ho jata hai with:
+
+// jwt.verify(token, secret)
+
+// JWT is like a tamper-proof admit card:
+
+//     Yeh 3 parts mein hota hai:
+
+//         Header (algo, type)
+
+//         Payload (user info like id/email)
+
+//         Signature (to prove authenticity)
+
+//         Server bas yeh karta hai:
+
+//     Token ko jwt.verify(token, secret) se decode karta hai
+
+//     Signature check karta hai (token kisi ne badla toh signature match nahi karega)
+
+//     Expiry time dekhta hai (agar expire ho gaya toh reject)
