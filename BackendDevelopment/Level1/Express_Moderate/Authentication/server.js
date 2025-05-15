@@ -6,7 +6,11 @@ const User = require('./UserModel');
 
 const bcrypt = require('bcryptjs');
 
+const jwt = require('jsonwebtoken');
+
 const PORT =8080;
+
+const SECRET_KEY = "qwerty123456";
 
 const app = express();
 
@@ -60,47 +64,42 @@ app.post('/signup',async(req,res)=>{
 
 // now we will write a login route, to test password verification using bcryptjs
 
-app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  console.log(req.body);
-  try {
-    // user sends email and password
-    const user = await User.findOne({ email });
+// app.post('/login', async (req, res) => {
+//   const { email, password } = req.body;
+//   console.log(req.body);
+//   try {
+//     // user sends email and password
+//     const user = await User.findOne({ email });
      
-    console.log(user)
+//     console.log(user)
 
-    if (!user) {
-      return res.status(404).json({
-        error: "Uhh ohh ! This user doesn't exist! Kindly sign up first."
-      });
-    }
-     console.log("Password from DB:", user.password);
+//     if (!user) {
+//       return res.status(404).json({
+//         error: "Uhh ohh ! This user doesn't exist! Kindly sign up first."
+//       });
+//     }
+//      console.log("Password from DB:", user.password);
 
-    const isMatch = await bcrypt.compare(password, user.password);
+//     const isMatch = await bcrypt.compare(password, user.password);
       
-    console.log(isMatch)
+//     console.log(isMatch)
 
-    if (!isMatch) {
-      return res.status(401).json({ error: "Wrong Password!" });
-    }
+//     if (!isMatch) {
+//       return res.status(401).json({ error: "Wrong Password!" });
+//     }
 
-    res.status(200).json({
-      message: "Login Successful!",
-      user: {
-        username: user.username,
-        email: user.email
-      }
-    });
+//     res.status(200).json({
+//       message: "Login Successful!",
+//       user: {
+//         username: user.username,
+//         email: user.email
+//       }
+//     });
 
-  } catch (err) {
-    res.status(500).json({ error: 'Server Error!' });
-  }
-});
-
-
-app.listen(PORT,()=>{
-    console.log(`Server started at PORT : ${PORT}`)
-});
+//   } catch (err) {
+//     res.status(500).json({ error: 'Server Error!' });
+//   }
+// });
 
 
 // Now, we will learn about JWTs and how to implement them.
@@ -136,3 +135,87 @@ app.listen(PORT,()=>{
 // → Toh user ko baar-baar login karne ki zarurat nahi
 // → Server ko state maintain karne ki zarurat nahi
 
+// So, JWT ka implementation 3 steps mein hoga =>
+
+//  step-1 : Login route updation to generate JWT when login is successful
+
+app.post('/login',async(req,res)=>{
+  const { email,password} = req.body;
+  try{
+    const user = await User.findOne({email});
+    if(!user){
+      return res.status(400).json({error:"Sorry this user doesnt exist, please register first !"});
+    }
+    const isMatch = await bcrypt.compare(password,user.password);
+
+    if(!isMatch){
+      return res.status(409).json({error:"Sorry ! Wrong Password "})
+    }
+
+    // JWT create karenge ab after isMatch is true
+
+    const payload = {
+      id:user._id,
+      email:user.email
+    }
+
+    const token =  jwt.sign(payload,SECRET_KEY,{expiresIn:'1h'});
+
+    res.status(200).json({
+      message:"Login Successful ! ",
+      token:token,
+      user:{
+        username:user.username,
+        email:user.email
+      }
+    });
+  }
+  catch(err){
+    res.status(500).json({error:"Internal Server Error !"})
+  }
+})
+
+// ab login pe user ko ek token mil jaayega, but uss token ka usage hai ki woh verify kara jaa sake, toh ab har protected route pe
+// yeh token hum verify kar sake uske liye, we will write a middleware.
+
+// Request aane pe JWT verify karna, Agar valid hai toh hi request aage jaayegi
+
+const verifyToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  // Check if token is present
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "No token found!" });
+  }
+
+  const token = authHeader.split(" ")[1]; // Bearer <token>
+
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    req.user = decoded; // user info ab request ke saath available
+    next();
+  } catch (err) {
+    res.status(403).json({ error: "Invalid or expired token!" });
+  }
+};
+
+// ab final step hai, to run this middleware on all protected routes, let us see and example :- 
+
+app.get('/profile', verifyToken, async (req, res) => {
+  // req.user contains the decoded user info from token
+  res.status(200).json({
+    message: "Welcome to your profile!",
+    user: req.user
+  });
+});
+
+
+app.listen(PORT,()=>{
+    console.log(`Server started at PORT : ${PORT}`)
+});
+
+
+// IMP POINT :- /profile jab hum postman mein run kar rahe hai, we are getting a successful response but when it comes to
+// browser, waha still we are getting an error, because, postman mein hum manually headers mein authorization mein bearer <token> set kar
+// rahe hai, whereas browser mein aisa automatically hota nahi hai , and manually karne ke liye frontend side , jab fetch karenge
+// route ko, tab header mein store karna padega token,aise localstorage mein hojayega store.
