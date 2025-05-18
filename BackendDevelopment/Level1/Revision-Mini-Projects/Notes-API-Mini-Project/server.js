@@ -213,7 +213,7 @@ const updatedNote = await Note.findByIdAndUpdate(id,{title,content},{new:true});
 
 res.status(201).json({
   message:"Note updated Successfully !",
-  updatedNote:note
+  updatedNote:updatedNote
 })
 }
 catch(err){
@@ -221,6 +221,23 @@ catch(err){
 }
 })
 
+// DELETE route for note 
+
+app.delete('/notes/:id',async(req,res)=>{
+      try{
+        const id = req.params.id;
+      
+      const deletedNote = await Note.findByIdAndDelete(id);
+
+      res.status(200).json({
+        message:"Note Deleted Successfully !",
+        note:deletedNote
+      });
+      }
+      catch(err){
+        res.status(500).json({error:"Internal Server Error !"})
+      }
+});
 
 app.listen(PORT,()=>{
   console.log(`Server successfully started at PORT : ${PORT}`)
