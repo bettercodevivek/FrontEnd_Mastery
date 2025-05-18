@@ -35,19 +35,10 @@ app.get('/',(req,res)=>{
 // we will write (/signup) POST route now
 
 app.post('/signup',async(req,res)=>{
+  
+})
 
-    const {username,email,password} = req.body;
-    console.log(req.body);
 
-    try{
-      if(!username || !email || !password){
-        return res.status(400).json({error:"All Credentials need to be filled !"})
-      }
-
-      const note = 
-
-    }
-    catch(err){
-
-    }
+app.listen(PORT,()=>{
+  console.log(`Server successfully started at PORT : ${PORT}`)
 });
