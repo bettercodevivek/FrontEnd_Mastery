@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema({
 UserSchema.pre("save",async function(next){
     const user = this;
 
-    if(!user.isModified('password')) return next;
+    if(!user.isModified('password')) return next();
 
     try{
       const saltRounds = 10;

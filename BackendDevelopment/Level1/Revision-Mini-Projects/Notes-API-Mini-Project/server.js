@@ -11,6 +11,7 @@ const User = require('./UserModel');
 const app = express();
 
 const AuthMiddleware = require('./AuthMiddleware');
+
 const Note = require('./NoteModel');
 
 const SECRET_KEY = "abcdef1234"
@@ -130,7 +131,11 @@ app.post('/notes',AuthMiddleware,async(req,res)=>{
         return res.status(401).json({error:"Both Fields need to be filled !"})
       }
 
-      const newNote = new Note({title,content});
+      const newNote = new Note({
+        title,
+        content,
+        user:req.user.userId
+      });
 
       await newNote.save();
        
@@ -138,14 +143,34 @@ app.post('/notes',AuthMiddleware,async(req,res)=>{
         message:"New Note Created Successfully !",
         note:{
           title:newNote.title,
-          content:newNote.content
+          content:newNote.content,
+          user:newNote.user
         }
       });
     }
     catch(err){
         res.status(500).json({error:"Internal Server Error !"})
     }
-})
+});
+
+app.get('/notes',AuthMiddleware,async(req,res)=>{
+  try{
+    const notes = await Note.find();
+
+  if(!notes){
+    return res.status(400).json({error:"No notes found !"})
+  }
+
+  res.status(200).json({
+    message:"Here are Your notes boss !",
+    notes
+  })
+  }
+  catch(err){
+    res.status(500).json({error:"Internal Server Error !"})
+  }
+});
+
 
 app.listen(PORT,()=>{
   console.log(`Server successfully started at PORT : ${PORT}`)
