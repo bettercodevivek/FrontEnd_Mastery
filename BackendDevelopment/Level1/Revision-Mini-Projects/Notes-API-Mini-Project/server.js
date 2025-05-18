@@ -172,6 +172,56 @@ app.get('/notes',AuthMiddleware,async(req,res)=>{
 });
 
 
+
+// GET route for dynamic routes
+
+app.get('/notes/:id',AuthMiddleware,async(req,res)=>{
+try{
+  const id = req.params.id;
+   
+  const note = await Note.findById(id);
+  
+  if(!note){
+    return res.status(404).json({error:"Note not found !"})
+  }
+  
+  res.status(200).json({
+    message:"Note found !",
+    note
+  });
+}
+catch(err){
+  res.status(500).json({error:"Internal Server Error !"})
+}
+})
+
+// PUT request for updating a note completely
+
+app.put('/notes/:id',AuthMiddleware,async(req,res)=>{
+try{
+   const id = req.params.id;
+    console.log(id);
+const {title,content} = req.body;
+console.log(req.body)
+const note = await Note.findById(id);
+console.log(note)
+if(!note){
+  return res.status(404).json({error:"Note Doesn't exist !"})
+}
+
+const updatedNote = await Note.findByIdAndUpdate(id,{title,content},{new:true});
+
+res.status(201).json({
+  message:"Note updated Successfully !",
+  updatedNote:note
+})
+}
+catch(err){
+  res.status(500).json({error:"Internal Server Error !"})
+}
+})
+
+
 app.listen(PORT,()=>{
   console.log(`Server successfully started at PORT : ${PORT}`)
 });
