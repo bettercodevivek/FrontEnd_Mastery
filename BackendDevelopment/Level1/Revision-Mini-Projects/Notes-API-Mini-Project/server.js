@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 
 const mongoose = require('mongoose');
@@ -14,9 +16,9 @@ const AuthMiddleware = require('./AuthMiddleware');
 
 const Note = require('./NoteModel');
 
-const SECRET_KEY = "abcdef1234"
+const SECRET_KEY = process.env.SECRET_KEY;
 
-const PORT = 8080;
+const PORT = process.env.PORT;
 
 // sabse pehle ek application level built-in middleware implement kardete hai
 
@@ -26,7 +28,7 @@ app.use(express.json());
 
 // Establish a connection with DB first
 
-mongoose.connect('mongodb://localhost:27017/')
+mongoose.connect(process.env.MONGODB_URL)
 .then(()=>{
     console.log("Established Connection with DB Successfully !")
 })
@@ -155,7 +157,7 @@ app.post('/notes',AuthMiddleware,async(req,res)=>{
 
 app.get('/notes',AuthMiddleware,async(req,res)=>{
   try{
-    const notes = await Note.find();
+    const notes = await Note.find({user:req.user.userId}); // filter notes by user
 
   if(!notes){
     return res.status(400).json({error:"No notes found !"})
@@ -200,13 +202,17 @@ catch(err){
 app.put('/notes/:id',AuthMiddleware,async(req,res)=>{
 try{
    const id = req.params.id;
-    console.log(id);
+
 const {title,content} = req.body;
-console.log(req.body)
+
 const note = await Note.findById(id);
-console.log(note)
+
 if(!note){
   return res.status(404).json({error:"Note Doesn't exist !"})
+}
+
+if(note.user.toString() !== req.user.userId){
+  return res.status(403).json({error:"unauthorized update attempt !"})
 }
 
 const updatedNote = await Note.findByIdAndUpdate(id,{title,content},{new:true});
@@ -223,11 +229,17 @@ catch(err){
 
 // DELETE route for note 
 
-app.delete('/notes/:id',async(req,res)=>{
+app.delete('/notes/:id',AuthMiddleware,async(req,res)=>{
       try{
         const id = req.params.id;
-      
-      const deletedNote = await Note.findByIdAndDelete(id);
+       
+        const note = await Note.findById(id);
+
+        if(!note.user.toString() !== req.user.UserId){
+          return res.status(403).json({error:"Unauthorized Delete Attempt !"})
+        }
+  
+        await note.deleteOne();
 
       res.status(200).json({
         message:"Note Deleted Successfully !",
