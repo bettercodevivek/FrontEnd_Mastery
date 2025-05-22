@@ -10,6 +10,8 @@ const bcrypt = require('bcryptjs');
 
 const User = require('./UserModel');
 
+const cookieparser = require('cookie-parser');
+
 const app = express();
 
 const AuthMiddleware = require('./AuthMiddleware');
@@ -23,6 +25,8 @@ const PORT = process.env.PORT;
 // sabse pehle ek application level built-in middleware implement kardete hai
 
 app.use(express.json());
+
+app.use(cookieparser());
 
 // so we need to build a notes api : meaning CRUD operations of notes, login and signup with jwt.
 
@@ -107,12 +111,25 @@ app.post('/login',async(req,res)=>{
     email:user.email
    }
 
-   const token = jwt.sign(payload,SECRET_KEY,{expiresIn:"1h"})
+   const accessToken = jwt.sign(payload,process.env.ACCESS_SECRET_KEY,{expiresIn:"15m"})
+
+   const refreshToken = jwt.sign(payload,process.env.REFRESH_SECRET_KEY,{expiresIn:"7d"})
+
+  // Send refreshToken in a secure HttpOnly cookie
+
+   res.cookie("refreshToken",refreshToken,{
+    httpOnly:true,
+    secure:true, // true only if using https
+    sameSite:"strict",
+    maxAge:7*24*60*60*1000,
+   })
+
+   // Why HttpOnly Cookie? Frontend JS can't access it (prevents XSS).
     
    res.status(200).json({
     message:"Login Successful !",
     user:{
-      token:token,
+      token:accessToken,
       username:user.username,
       email:user.email
     }
@@ -121,6 +138,38 @@ app.post('/login',async(req,res)=>{
  catch(err){
   res.status(500).json({error:"Internal Server Error !"});
  }
+})
+
+// Add a new route '/refresh-token' 
+
+app.post('/refresh-token',async(req,res)=>{
+  const token = req.cookies.refreshToken;
+  
+   if(!token){
+    return res.status(400).json({error:"Refresh Token Missing !"})
+   }
+
+   try{
+
+    const decoded = jwt.verify(token,process.env.REFRESH_SECRET_KEY);
+
+    const payload = {
+      userId:decoded.userId,
+      email:decoded.email
+    }
+
+    const newToken = jwt.sign(
+     payload,
+     process.env.REFRESH_SECRET_KEY,
+     {expiresIn:"15m"}
+    );
+
+    res.status(200).json({accessToken:newToken})
+
+   }
+   catch(err){
+    res.status(403).json({error:"Invalid Refresh Token !"})
+   }
 })
 
 // now we will start with notes routes and we will apply authmiddleware to each route as each route is protected in this scenario
