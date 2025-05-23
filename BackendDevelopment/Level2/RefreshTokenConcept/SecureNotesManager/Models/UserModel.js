@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
 const UserSchema = new mongoose.Schema({
     username:{
         type:String,
-        split:true,
         required:true
     },
     email:{
@@ -19,7 +18,7 @@ const UserSchema = new mongoose.Schema({
         type:String,
         required:true
     }
-});
+},{timestamps:true});
 
 // before creating the model,hum ek pre-middleware likhenge , jiska sirf ek hi kaam hoga, user signup hua toh password hash hojaye uska
 // password hashing before it gets saved to DB, for hashing we will use bcryptjs.
@@ -27,6 +26,7 @@ const UserSchema = new mongoose.Schema({
 UserSchema.pre('save',async function(next){
     const user = this;
     const SaltRounds = 10;
+    if(!user.isModified('password')) return next();
     try{
      const hashedPwd = await bcrypt.hash(user.password,SaltRounds);
      user.password = hashedPwd;
@@ -37,6 +37,6 @@ UserSchema.pre('save',async function(next){
     }
 })
 
-const UserModel = mongoose.Model('User',UserSchema);
+const UserModel = mongoose.model('User',UserSchema);
 
 module.exports = UserModel;

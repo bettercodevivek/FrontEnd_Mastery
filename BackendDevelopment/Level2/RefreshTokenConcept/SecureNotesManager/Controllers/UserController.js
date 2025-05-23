@@ -14,7 +14,7 @@ const Signup = async(req,res) => {
 
     const newUser = new User({username,email,password});
 
-    console.log(newUser);
+    // console.log(newUser);
 
     await newUser.save();
 
@@ -40,10 +40,10 @@ const login = async(req,res) => {
         return res.status(401).json({error:" Fill all the credentials !"})
     }
 
-    const user = User.findOne({email});
+    const user = await User.findOne({email});
 
     if(!user){
-        return res.status(409).json({error:"user doesnt exist, kindly login first !"});
+        return res.status(404).json({error:"user doesnt exist, kindly login first !"});
     }
 
     const isMatch = await bcrypt.compare(password,user.password);

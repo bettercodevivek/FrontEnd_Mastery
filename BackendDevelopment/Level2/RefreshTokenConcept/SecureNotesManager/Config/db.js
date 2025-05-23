@@ -8,10 +8,7 @@ const ConnectDB = async() => {
    // ka code block hojaye, we want this to be of non-blocking nature.
 
     try{
-      mongoose.connect(process.env.MONGODB_URL,{
-        useNewUrlParser:true,
-        useUnifiedTopology:true
-      })
+      mongoose.connect(process.env.MONGODB_URL)
       console.log("Connection with DB established successfully !")
     }
     catch(err){
