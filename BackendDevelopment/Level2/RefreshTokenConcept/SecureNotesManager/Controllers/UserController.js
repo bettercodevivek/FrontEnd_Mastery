@@ -78,4 +78,37 @@ const login = async(req,res) => {
     }
 }
 
-module.exports = {Signup,login} ;
+const refreshToken = async(req,res) => {
+    const refreshToken = req.cookies.refreshToken;
+
+    if(!refreshToken){
+        return res.status(404).json({error:"refresh token not found !"})
+    }
+
+    try{
+      
+     const decoded = jwt.verify(refreshToken,process.env.REFRESH_SECRET_KEY);
+
+     if(!decoded){
+        return res.status(404).json({error:"verification of refresh token failed !"})
+     }
+
+     const payload = {
+        userId:decoded.userId,
+        email:decoded.email
+     }
+
+     const accessToken = jwt.sign(payload,process.env.ACCESS_SECRET_KEY,{expiresIn:"1m"});
+
+     res.status(200).json({
+        message:"New Access token generated !",
+        token:accessToken
+     })
+
+    }
+    catch(err){
+        res.status(500).json({error:"Internal Server Error !"})
+    }
+}
+
+module.exports = {Signup,login,refreshToken} ;
