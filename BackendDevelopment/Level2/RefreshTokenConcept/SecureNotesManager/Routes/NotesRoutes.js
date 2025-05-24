@@ -4,8 +4,10 @@ const router = express.Router();
 
 const {CreateNote,getNotes} = require('../Controllers/NoteController');
 
-router.post('/notes',CreateNote);
+const AuthMiddleware = require('../Middlewares/AuthMiddleware')
 
-router.get('/notes',getNotes);
+router.post('/notes',AuthMiddleware,CreateNote);
+
+router.get('/notes',AuthMiddleware,getNotes);
 
 module.exports = router;

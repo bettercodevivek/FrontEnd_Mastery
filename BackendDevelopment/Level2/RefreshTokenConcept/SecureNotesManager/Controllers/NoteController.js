@@ -13,7 +13,10 @@ const CreateNote = async(req,res) => {
         return res.status(404).json({error:"All credentials are necessary !"})
     }
 
-    const newNote = new Note({title,content});
+    const newNote = new Note({title,content,user:req.user.userId});
+
+    // yaha ek mistake yeh hui thi ki, if we want ki hum notes ko user-based access de, we need to store userId along with note too in DB
+    // we were only sending it as a reponse earlier and not storing it above, leading to getting no notes in get request 
 
     await newNote.save();
 
@@ -21,7 +24,8 @@ const CreateNote = async(req,res) => {
         message:"New Note Created Successfully !",
         note:{
             title:newNote.title,
-            createdAt:newNote.createdAt
+            createdAt:newNote.createdAt,
+            user:req.user.userId
         }
     });
     }
@@ -34,15 +38,15 @@ const CreateNote = async(req,res) => {
 
 const getNotes = async(req,res) =>{
    try{
-    const notes = Note.find(req.user.userId);
+    const notes = await Note.find({user:req.user.userId});
 
-    if(!notes){
+    if(!notes.length){
         return res.status(401).json({error:"No notes found !!"})
     }
 
     res.status(200).json({
         message:"Here are your notes",
-        notes
+        notes:notes
     })
    }
     catch(err){

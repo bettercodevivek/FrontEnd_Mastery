@@ -22,7 +22,7 @@ ConnectDB();
 
 app.use('/api/auth',authRoutes);
 
-app.use('/api/notes',noteRoutes);
+app.use('/api',noteRoutes);
 
 app.listen(PORT,()=>{
     console.log('Server Started Successfully !')
