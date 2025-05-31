@@ -8,7 +8,7 @@ const ConnectDB = async() => {
        console.log('Connection Established with DB Successful !')
     }
     catch(err){
-        next(err);
+        console.log("Error in establishing connection with DB", err.message);
         process.exit(1);
     }
 }
