@@ -12,7 +12,7 @@ const cookieParser = require('cookie-parser');
 
 const ConnectDB = require('./Config/db')
 
-const PORT = 8080;
+const PORT = process.env.PORT||8080;
 
 
 ConnectDB();

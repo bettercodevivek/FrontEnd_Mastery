@@ -6,9 +6,9 @@ const express = require('express');
 
 const TaskRouter = express.Router();
 
-TaskRouter.post('/tasks',AuthMiddleware,createTask);
+TaskRouter.post('/create',AuthMiddleware,createTask);
 
-TaskRouter.get('/tasks',AuthMiddleware,ViewTasks);
+TaskRouter.get('/view',AuthMiddleware,ViewTasks);
 
 
 module.exports = TaskRouter;
