@@ -28,6 +28,9 @@ const UserSchema = new mongoose.Schema({
 UserSchema.pre('save',async function(next){
     const user = this;
     const saltRounds = 10;
+    
+    if(!user.isModified('password')) return next();
+
     try{
        const hashedPwd = await bcrypt.hash(user.password,saltRounds);
        user.password = hashedPwd;

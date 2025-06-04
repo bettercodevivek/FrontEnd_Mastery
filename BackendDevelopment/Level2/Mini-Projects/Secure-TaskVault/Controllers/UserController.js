@@ -1,6 +1,8 @@
 // Here we will write the handler functions for the user routes
 // generally we have three user routes =>  signup, login and refreshToken
 
+require('dotenv').config();
+
 const jwt = require('jsonwebtoken');
 
 const bcrypt = require('bcryptjs');
@@ -74,9 +76,9 @@ const payload = {
     userId:user._id
 }
 
-const AcceptToken = jwt.sign(payload,ACCEPT_SECRET_KEY,{expiresIn:"2m"});
+const AcceptToken = jwt.sign(payload,process.env.ACCESS_SECRET_KEY,{expiresIn:"2m"});
 
-const refreshToken = jwt.sign(payload,REFRESH_SECRET_KEY,{expiresIn:"7d"});
+const refreshToken = jwt.sign(payload,process.env.REFRESH_SECRET_KEY,{expiresIn:"7d"});
 
 res.cookie('refreshToken',refreshToken,{
     httpOnly:true,
@@ -103,7 +105,7 @@ const RefreshToken = async(req,res) => {
     
     console.log(refresh_token);
 
-    const decoded = jwt.verify(refresh_token,REFRESH_SECRET_KEY);
+    const decoded = jwt.verify(refresh_token,process.env.REFRESH_SECRET_KEY);
 
     if(!decoded){
         return res.status(409).json({error:" Token verification failed !"})
@@ -111,10 +113,11 @@ const RefreshToken = async(req,res) => {
 
     const payload = {
         username: decoded.username,
-        email:decoded.email
+        email:decoded.email,
+        userId:decoded.userId
     }
 
-    const newToken = jwt.sign(payload,ACCEPT_SECRET_KEY,{expiresIn:"2m"});
+    const newToken = jwt.sign(payload,process.env.ACCESS_SECRET_KEY,{expiresIn:"2m"});
 
     res.status(200).json({
         message:"New Accept token generated successfully !",
@@ -126,3 +129,5 @@ const RefreshToken = async(req,res) => {
     }
      
 }
+
+module.exports = {Signup,Login,RefreshToken} ;
